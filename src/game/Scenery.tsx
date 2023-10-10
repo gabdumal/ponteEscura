@@ -2,13 +2,12 @@ import React from 'react';
 import {Box, Text} from 'ink';
 import State, {RiverBank} from '../engine/State.ts';
 
-export default function Scenery() {
-	const [state, setState] = React.useState<State>();
 
-	React.useEffect(() => {
-		const state = new State();
-		setState(state);
-	}, []);
+interface SceneryProps {
+	state: State;
+}
+export default function Scenery(props: SceneryProps) {
+	const state = props.state;
 
 	let initialRiverBankContent = '';
 	let finalRiverBankContent = '';

@@ -11,6 +11,7 @@ export default class State {
 	private finalRiverBank: Array<Item>;
 	private remainingTime: number;
 
+	/// Constructor
 	constructor() {
 		this.initialRiverBank = [
 			Item.Lamp,
@@ -25,7 +26,7 @@ export default class State {
 	}
 
 	/// Getters
-	public getRiverBankValues(riverBank: RiverBank): Array<Item> {
+	public getRiverBankItems(riverBank: RiverBank): Array<Item> {
 		if (riverBank === RiverBank.Initial) return this.initialRiverBank;
 		else return this.finalRiverBank;
 	}
@@ -41,6 +42,17 @@ export default class State {
 	}
 
 	/// Setters
+	public setRiverBankItems(
+		riverBank: RiverBank,
+		items: Array<Item>
+	): void {
+		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
+		else this.finalRiverBank = items;
+	}
+
+	public setRemainingTime(remainingTime: number): void {
+		this.remainingTime = remainingTime;
+	}
 
 	/// Methods
 	private getItemSymbol(item: Item) {
