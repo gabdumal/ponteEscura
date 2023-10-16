@@ -1,4 +1,5 @@
 import {Item} from '../types.ts';
+import Rule from './Rule.ts';
 
 export enum RiverBank {
 	Initial,
@@ -82,4 +83,31 @@ export default class State {
 		}
 		return itemSymbol;
 	}
+
+	getValidRules(){
+		const lampPosition = this.getLampPosition();
+		const currentRiverBank = this.getRiverBankItems(lampPosition);
+
+		// Note: JavaScript weakly nature ignores Lamp, because it is set to 0, so rules with Lamp are created as a single person travelling
+		const validRules : Array<Rule> = [];
+		for (let i = currentRiverBank.length - 1; i >= 0; i--) {
+			const item1 = currentRiverBank[i];
+			for (let j = i - 1; j >= 0; j--) {
+				const item2 = currentRiverBank[j];
+				validRules.push(new Rule(item1, item2));
+			}
+		}
+
+		return validRules;
+	}
+
+	getLampPosition(){
+		return this.initialRiverBank.indexOf(Item.Lamp) !== -1 ? RiverBank.Initial : RiverBank.Final;
+	}
+
+	/// Static methods
+	static getOppositeRiverBank(lampPosition: RiverBank){
+		return lampPosition === RiverBank.Initial ? RiverBank.Final : RiverBank.Initial;
+	}
+
 }

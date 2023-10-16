@@ -15,6 +15,10 @@ export default class Rule{
 		return this.travellingPeople;
 	}
 
+	getTravellingPeopleSymbols():Array<string>{
+		return this.travellingPeople.map(item => Item[item]);
+	}
+
 	getElapsedTime():number{
 		return Math.max(...this.travellingPeople);
 	}
@@ -35,7 +39,7 @@ export default class Rule{
 		});
 
 		// Clone opposite river bank, and include the lamp and the people who are travelling
-		state.getRiverBankItems(lampPosition === RiverBank.Initial? RiverBank.Final : RiverBank.Initial).forEach(item => {
+		state.getRiverBankItems(State.getOppositeRiverBank(lampPosition)).forEach(item => {
 				oppositeRiverBank.push(item);
 			});
 		oppositeRiverBank.push(Item.Lamp);
