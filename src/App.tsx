@@ -2,13 +2,11 @@ import React from 'react';
 import {Box, Text} from 'ink';
 import Scenery from './game/Scenery.tsx';
 import State from './engine/State.ts';
-import {Item} from './types.ts';
-import Rule from './engine/Rule.ts';
+import PickRule from './game/PickRule.tsx';
 
 export default function App() {
 	const [state, setState] = React.useState<State>(new State());
-	const rule = new Rule(Item.Athlete, Item.Lady);
-	const transposedState = rule.transpose(state);
+	const validRules = state.getValidRules();
 
 	return (
 		<Box flexDirection="column">
@@ -19,7 +17,7 @@ export default function App() {
 			</Box>
 			<Scenery state={state} />
 			<Text>Escolha uma regra:</Text>
-			<Scenery state={transposedState} />
+			<PickRule validRules={validRules} />
 		</Box>
 	);
 }
