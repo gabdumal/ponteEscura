@@ -4,6 +4,7 @@ import Rule from '../engine/Rule.ts';
 
 interface PickRuleProps {
 	validRules: Array<Rule>;
+	handleSelect: (rule: Rule) => void;
 }
 export default function PickRule(props: PickRuleProps) {
 	const validRules = props.validRules;
@@ -22,6 +23,9 @@ export default function PickRule(props: PickRuleProps) {
 	}
 
 	return (
-		<SelectInput items={options} onSelect={item => console.log(item.value)} />
+		<SelectInput
+			items={options}
+			onSelect={item => props.handleSelect(item.value)}
+		/>
 	);
 }

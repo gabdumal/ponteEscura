@@ -88,12 +88,16 @@ export default class State {
 		const lampPosition = this.getLampPosition();
 		const currentRiverBank = this.getRiverBankItems(lampPosition);
 
-		// Note: JavaScript weakly nature ignores Lamp, because it is set to 0, so rules with Lamp are created as a single person travelling
 		const validRules : Array<Rule> = [];
 		for (let i = currentRiverBank.length - 1; i >= 0; i--) {
 			const item1 = currentRiverBank[i];
+			if(item1 === Item.Lamp)
+				continue;
+			validRules.push(new Rule(item1));
 			for (let j = i - 1; j >= 0; j--) {
 				const item2 = currentRiverBank[j];
+				if(item2 === Item.Lamp)
+					continue;
 				validRules.push(new Rule(item1, item2));
 			}
 		}
