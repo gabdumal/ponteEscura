@@ -6,14 +6,14 @@ export default class GraphNode {
 	/// Attributes
 	private id: number;
 	private state: State;
-	// private sourceEdges: Array<GraphEdge>;
+	private sourceEdges: Array<GraphEdge>;
 	private targetEdges: Array<GraphEdge>;
 
 	/// Constructor
 	constructor(id: number, state: State) {
 		this.id = id;
 		this.state = state;
-		// this.sourceEdges = [];
+		this.sourceEdges = [];
 		this.targetEdges = [];
 	}
 
@@ -36,10 +36,10 @@ export default class GraphNode {
 	}
 
 	/// Methods
-	// private addSourceEdge(source: GraphNode, rule: Rule): void {
-	// 	const edge = new GraphEdge(source, rule);
-	// 	this.sourceEdges.push(edge);
-	// }
+	private addSourceEdge(source: GraphNode, rule: Rule): void {
+		const edge = new GraphEdge(source, this, rule);
+		this.sourceEdges.push(edge);
+	}
 
 	private addTargetEdge(target: GraphNode, rule: Rule): void {
 		const edge = new GraphEdge(this, target, rule);
@@ -47,7 +47,19 @@ export default class GraphNode {
 	}
 
 	public addEdge(target: GraphNode, rule: Rule): void {
-		// target.addSourceEdge(this, rule);
+		target.addSourceEdge(this, rule);
 		this.addTargetEdge(target, rule);
+	}
+
+	public checkIfThereIsLoop(state: State): boolean {
+		for (const sourceEdge of this.sourceEdges) {
+			const sourceNode = sourceEdge.getSourceNode();
+			if (sourceNode.getState().equalsByItems(state)) {
+				return true;
+			} else {
+				return sourceNode.checkIfThereIsLoop(state);
+			}
+		}
+		return false;
 	}
 }

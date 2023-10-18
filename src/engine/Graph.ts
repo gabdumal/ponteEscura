@@ -19,6 +19,9 @@ export default class Graph {
 	}
 
 	/// Getters
+	public getNodes(): Array<GraphNode> {
+		return this.nodes;
+	}
 
 	/// Setters
 
@@ -30,12 +33,27 @@ export default class Graph {
 		return node;
 	}
 
+	public createValidTransitions(node: GraphNode): void {
+		const validRules = node.getState().getValidRules();
+		for (const rule of validRules) {
+			const newState = rule.transpose(node.getState());
+			const outcome = newState.getOutcome();
+			if (!outcome.isTerminal) {
+				if (!node.checkIfThereIsLoop(newState)) {
+					const newNode = this.addNode(newState);
+					node.addEdge(newNode, rule);
+					this.createValidTransitions(newNode);
+				}
+			}
+		}
+	}
+
 	public exportToDot(): string {
 		const dotGraph = new GraphvizDigraph('G');
 
 		for (const node of this.nodes) {
 			const dotNode = new GraphvizNode(node.getId().toString(), {
-				label: node.getId().toString(),
+				label: node.getState().getPlainTextScenery(),
 			});
 			dotGraph.addNode(dotNode);
 		}

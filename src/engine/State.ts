@@ -105,6 +105,16 @@ export default class State {
 		}
 	}
 
+	getPlainTextScenery() {
+		const initialRiverBank = this.getRiverBankSymbols(RiverBank.Initial);
+		const finalRiverBank = this.getRiverBankSymbols(RiverBank.Final);
+
+		const initialRiverBankString = initialRiverBank.join(' ');
+		const finalRiverBankString = finalRiverBank.join(' ');
+
+		return `[${initialRiverBankString}] [${finalRiverBankString}] (${this.remainingTime})`;
+	}
+
 	/// Setters
 	public setRiverBankItems(riverBank: RiverBank, items: Array<Item>): void {
 		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
@@ -116,6 +126,27 @@ export default class State {
 	}
 
 	/// Methods
+	public equalsByItems(state: State): boolean {
+		const thisInitialRiverBank = this.getRiverBankItems(RiverBank.Initial);
+		const thisFinalRiverBank = this.getRiverBankItems(RiverBank.Final);
+
+		const otherInitialRiverBank = state.getRiverBankItems(RiverBank.Initial);
+		const otherFinalRiverBank = state.getRiverBankItems(RiverBank.Final);
+
+		if (thisInitialRiverBank.length !== otherInitialRiverBank.length)
+			return false;
+		if (thisFinalRiverBank.length !== otherFinalRiverBank.length) return false;
+
+		for (let i = 0; i < thisInitialRiverBank.length; i++) {
+			if (thisInitialRiverBank[i] !== otherInitialRiverBank[i]) return false;
+		}
+
+		for (let i = 0; i < thisFinalRiverBank.length; i++) {
+			if (thisFinalRiverBank[i] !== otherFinalRiverBank[i]) return false;
+		}
+
+		return true;
+	}
 
 	/// Static methods
 	static getOppositeRiverBank(lampPosition: RiverBank) {

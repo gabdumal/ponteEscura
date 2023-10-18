@@ -3,24 +3,24 @@ import Rule from './Rule.js';
 
 export default class GraphEdge {
 	/// Attributes
-	private source: GraphNode;
-	private target: GraphNode;
+	private sourceNode: GraphNode;
+	private targetNode: GraphNode;
 	private rule: Rule;
 
 	/// Constructor
-	constructor(source: GraphNode, target: GraphNode, rule: Rule) {
-		this.source = source;
-		this.target = target;
+	constructor(sourceNode: GraphNode, targetNode: GraphNode, rule: Rule) {
+		this.sourceNode = sourceNode;
+		this.targetNode = targetNode;
 		this.rule = rule;
 	}
 
 	/// Getters
-	public getSource(): GraphNode {
-		return this.source;
+	public getSourceNode(): GraphNode {
+		return this.sourceNode;
 	}
 
-	public getTarget(): GraphNode {
-		return this.target;
+	public getTargetNode(): GraphNode {
+		return this.targetNode;
 	}
 
 	public getRule(): Rule {
