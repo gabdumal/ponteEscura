@@ -42,17 +42,6 @@ export default class State {
 		return this.remainingTime;
 	}
 
-	/// Setters
-	public setRiverBankItems(riverBank: RiverBank, items: Array<Item>): void {
-		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
-		else this.finalRiverBank = items;
-	}
-
-	public setRemainingTime(remainingTime: number): void {
-		this.remainingTime = remainingTime;
-	}
-
-	/// Methods
 	private getItemSymbol(item: Item) {
 		const itemName = Item[item];
 		let itemSymbol = '';
@@ -115,6 +104,18 @@ export default class State {
 			else return {isTerminal: false, win: false};
 		}
 	}
+
+	/// Setters
+	public setRiverBankItems(riverBank: RiverBank, items: Array<Item>): void {
+		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
+		else this.finalRiverBank = items;
+	}
+
+	public setRemainingTime(remainingTime: number): void {
+		this.remainingTime = remainingTime;
+	}
+
+	/// Methods
 
 	/// Static methods
 	static getOppositeRiverBank(lampPosition: RiverBank) {

@@ -1,63 +1,67 @@
-import { Item } from "../types.ts";
-import State, { RiverBank } from "./State.ts";
+import {Item} from '../types.ts';
+import State, {RiverBank} from './State.ts';
 
-export default class Rule{
+export default class Rule {
 	/// Attributes
-	private travellingPeople : Array<Item>;
+	private travellingPeople: Array<Item>;
 
 	/// Constructor
-	constructor(firstPerson: Item, secondPerson?:Item) {
-		this.travellingPeople = secondPerson? [firstPerson, secondPerson] : [firstPerson];
+	constructor(firstPerson: Item, secondPerson?: Item) {
+		this.travellingPeople = secondPerson
+			? [firstPerson, secondPerson]
+			: [firstPerson];
 	}
 
 	/// Getters
-	getTravellingPeople():Array<Item>{
+	getTravellingPeople(): Array<Item> {
 		return this.travellingPeople;
 	}
 
-	getTravellingPeopleSymbols():Array<string>{
+	getTravellingPeopleSymbols(): Array<string> {
 		return this.travellingPeople.map(item => Item[item]);
 	}
 
-	getElapsedTime():number{
+	getElapsedTime(): number {
 		return Math.max(...this.travellingPeople);
 	}
 
 	/// Setters
 
 	/// Methods
-	public transpose(state: State): State{
-		const lampPosition = state.getRiverBankItems(RiverBank.Initial).indexOf(Item.Lamp) !== -1 ? RiverBank.Initial : RiverBank.Final;
+	public transpose(state: State): State {
+		const lampPosition =
+			state.getRiverBankItems(RiverBank.Initial).indexOf(Item.Lamp) !== -1
+				? RiverBank.Initial
+				: RiverBank.Final;
 		const transposedState = new State();
-		const currentRiverBank : Array<Item> = [];
-		const oppositeRiverBank : Array<Item> = [];
+		const currentRiverBank: Array<Item> = [];
+		const oppositeRiverBank: Array<Item> = [];
 
 		// Clone current river bank, except for the lamp and the people who are travelling
 		state.getRiverBankItems(lampPosition).forEach(item => {
-			if(this.travellingPeople.indexOf(item) === -1 && item !== Item.Lamp)
+			if (this.travellingPeople.indexOf(item) === -1 && item !== Item.Lamp)
 				currentRiverBank.push(item);
 		});
 
 		// Clone opposite river bank, and include the lamp and the people who are travelling
-		state.getRiverBankItems(State.getOppositeRiverBank(lampPosition)).forEach(item => {
+		state
+			.getRiverBankItems(State.getOppositeRiverBank(lampPosition))
+			.forEach(item => {
 				oppositeRiverBank.push(item);
 			});
 		oppositeRiverBank.push(Item.Lamp);
 		oppositeRiverBank.push(...this.travellingPeople);
 
-
 		// Update state
-		transposedState.setRiverBankItems(
-			lampPosition,
-			currentRiverBank
-		);
+		transposedState.setRiverBankItems(lampPosition, currentRiverBank);
 		transposedState.setRiverBankItems(
 			lampPosition === RiverBank.Initial ? RiverBank.Final : RiverBank.Initial,
-			oppositeRiverBank
+			oppositeRiverBank,
 		);
-		transposedState.setRemainingTime(state.getRemainingTime() - this.getElapsedTime());
+		transposedState.setRemainingTime(
+			state.getRemainingTime() - this.getElapsedTime(),
+		);
 
 		return transposedState;
 	}
-
 }
