@@ -6,3 +6,8 @@ export enum Item {
 	Woman = 8,
 	Lady = 12,
 }
+
+export type Outcome = {
+	isTerminal: boolean,
+	win: boolean,
+}

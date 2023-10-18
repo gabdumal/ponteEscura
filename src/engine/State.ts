@@ -1,4 +1,4 @@
-import {Item} from '../types.ts';
+import {Item, Outcome} from '../types.ts';
 import Rule from './Rule.ts';
 
 export enum RiverBank {
@@ -43,10 +43,7 @@ export default class State {
 	}
 
 	/// Setters
-	public setRiverBankItems(
-		riverBank: RiverBank,
-		items: Array<Item>
-	): void {
+	public setRiverBankItems(riverBank: RiverBank, items: Array<Item>): void {
 		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
 		else this.finalRiverBank = items;
 	}
@@ -84,20 +81,18 @@ export default class State {
 		return itemSymbol;
 	}
 
-	getValidRules(){
+	getValidRules() {
 		const lampPosition = this.getLampPosition();
 		const currentRiverBank = this.getRiverBankItems(lampPosition);
 
-		const validRules : Array<Rule> = [];
+		const validRules: Array<Rule> = [];
 		for (let i = currentRiverBank.length - 1; i >= 0; i--) {
 			const item1 = currentRiverBank[i];
-			if(item1 === Item.Lamp)
-				continue;
+			if (item1 === Item.Lamp) continue;
 			validRules.push(new Rule(item1));
 			for (let j = i - 1; j >= 0; j--) {
 				const item2 = currentRiverBank[j];
-				if(item2 === Item.Lamp)
-					continue;
+				if (item2 === Item.Lamp) continue;
 				validRules.push(new Rule(item1, item2));
 			}
 		}
@@ -105,13 +100,26 @@ export default class State {
 		return validRules;
 	}
 
-	getLampPosition(){
-		return this.initialRiverBank.indexOf(Item.Lamp) !== -1 ? RiverBank.Initial : RiverBank.Final;
+	getLampPosition() {
+		return this.initialRiverBank.indexOf(Item.Lamp) !== -1
+			? RiverBank.Initial
+			: RiverBank.Final;
+	}
+
+	getOutcome(): Outcome {
+		if (this.initialRiverBank.length === 0) {
+			if (this.remainingTime >= 0) return {isTerminal: true, win: true};
+			else return {isTerminal: true, win: false};
+		} else {
+			if (this.remainingTime <= 0) return {isTerminal: true, win: false};
+			else return {isTerminal: false, win: false};
+		}
 	}
 
 	/// Static methods
-	static getOppositeRiverBank(lampPosition: RiverBank){
-		return lampPosition === RiverBank.Initial ? RiverBank.Final : RiverBank.Initial;
+	static getOppositeRiverBank(lampPosition: RiverBank) {
+		return lampPosition === RiverBank.Initial
+			? RiverBank.Final
+			: RiverBank.Initial;
 	}
-
 }

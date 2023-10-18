@@ -7,10 +7,15 @@ import Rule from './engine/Rule.ts';
 
 export default function App() {
 	const [state, setState] = React.useState<State>(new State());
+	const [isTerminal, setIsTerminal] = React.useState<boolean>(false);
+	const [victory, setVictory] = React.useState<boolean>(false);
 	const validRules = state.getValidRules();
 
 	function handleSelect(rule: Rule) {
 		const newState = rule.transpose(state);
+		const {isTerminal, win} = newState.getOutcome();
+		setIsTerminal(isTerminal);
+		setVictory(win);
 		setState(newState);
 	}
 
@@ -22,8 +27,18 @@ export default function App() {
 				</Text>
 			</Box>
 			<Scenery state={state} />
-			<Text>Escolha uma regra:</Text>
-			<PickRule validRules={validRules} handleSelect={handleSelect} />
+			{isTerminal ? (
+				<Box>
+					<Text bold color={victory ? 'greenBright' : 'redBright'}>
+						{victory ? 'Vitória!' : 'Derrota!'}
+					</Text>
+				</Box>
+			) : (
+				<Box flexDirection="column">
+					<Text>Escolha uma regra:</Text>
+					<PickRule validRules={validRules} handleSelect={handleSelect} />
+				</Box>
+			)}
 		</Box>
 	);
 }

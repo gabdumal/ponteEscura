@@ -22,6 +22,12 @@ export default function PickRule(props: PickRuleProps) {
 		aux++;
 	}
 
+	options.sort((a, b) => {
+		const aTime = parseInt(a.label.split('(')[1].split(')')[0]);
+		const bTime = parseInt(b.label.split('(')[1].split(')')[0]);
+		return aTime - bTime;
+	});
+
 	return (
 		<SelectInput
 			items={options}
