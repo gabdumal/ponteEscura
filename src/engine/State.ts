@@ -1,5 +1,6 @@
 import {Item, Outcome} from '../types.ts';
 import Rule from './Rule.ts';
+import {getItemSymbol} from './util.ts';
 
 export enum RiverBank {
 	Initial,
@@ -21,7 +22,7 @@ export default class State {
 			Item.Lord,
 			Item.Woman,
 			Item.Lady,
-		];
+		].sort((a, b) => a - b);
 		this.finalRiverBank = [];
 		this.remainingTime = 30;
 	}
@@ -34,40 +35,12 @@ export default class State {
 
 	public getRiverBankSymbols(riverBank: RiverBank): Array<string> {
 		if (riverBank === RiverBank.Initial)
-			return this.initialRiverBank.map(item => this.getItemSymbol(item));
-		else return this.finalRiverBank.map(item => this.getItemSymbol(item));
+			return this.initialRiverBank.map(item => getItemSymbol(item));
+		else return this.finalRiverBank.map(item => getItemSymbol(item));
 	}
 
 	public getRemainingTime(): number {
 		return this.remainingTime;
-	}
-
-	private getItemSymbol(item: Item) {
-		const itemName = Item[item];
-		let itemSymbol = '';
-		switch (itemName) {
-			case 'Lamp':
-				itemSymbol = 'L';
-				break;
-			case 'Athlete':
-				itemSymbol = 'A';
-				break;
-			case 'Boy':
-				itemSymbol = 'G';
-				break;
-			case 'Lord':
-				itemSymbol = 'S';
-				break;
-			case 'Woman':
-				itemSymbol = 'M';
-				break;
-			case 'Lady':
-				itemSymbol = 'V';
-				break;
-			default:
-				break;
-		}
-		return itemSymbol;
 	}
 
 	getValidRules() {
@@ -117,8 +90,9 @@ export default class State {
 
 	/// Setters
 	public setRiverBankItems(riverBank: RiverBank, items: Array<Item>): void {
-		if (riverBank === RiverBank.Initial) this.initialRiverBank = items;
-		else this.finalRiverBank = items;
+		const sortedItems = items.slice().sort((a, b) => a - b);
+		if (riverBank === RiverBank.Initial) this.initialRiverBank = sortedItems;
+		else this.finalRiverBank = sortedItems;
 	}
 
 	public setRemainingTime(remainingTime: number): void {

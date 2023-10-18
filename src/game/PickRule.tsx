@@ -12,7 +12,7 @@ export default function PickRule(props: PickRuleProps) {
 
 	let aux = 0;
 	for (const rule of validRules) {
-		const travellingPeople = rule.getTravellingPeopleSymbols();
+		const travellingPeople = rule.getTravellingPeopleNames();
 		let travellingPeopleContent = '[' + travellingPeople[0];
 		if (travellingPeople.length > 1)
 			travellingPeopleContent += ', ' + travellingPeople[1];
@@ -23,8 +23,8 @@ export default function PickRule(props: PickRuleProps) {
 	}
 
 	options.sort((a, b) => {
-		const aTime = parseInt(a.label.split('(')[1].split(')')[0]);
-		const bTime = parseInt(b.label.split('(')[1].split(')')[0]);
+		const aTime = a.value.getElapsedTime();
+		const bTime = b.value.getElapsedTime();
 		return aTime - bTime;
 	});
 

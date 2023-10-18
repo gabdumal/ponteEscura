@@ -1,5 +1,6 @@
 import {Item} from '../types.ts';
 import State, {RiverBank} from './State.ts';
+import {getItemName, getItemSymbol} from './util.ts';
 
 export default class Rule {
 	/// Attributes
@@ -8,7 +9,7 @@ export default class Rule {
 	/// Constructor
 	constructor(firstPerson: Item, secondPerson?: Item) {
 		this.travellingPeople = secondPerson
-			? [firstPerson, secondPerson]
+			? [firstPerson, secondPerson].sort((a, b) => a - b)
 			: [firstPerson];
 	}
 
@@ -17,12 +18,22 @@ export default class Rule {
 		return this.travellingPeople;
 	}
 
+	getTravellingPeopleNames(): Array<string> {
+		return this.travellingPeople.map(item => getItemName(item));
+	}
+
 	getTravellingPeopleSymbols(): Array<string> {
-		return this.travellingPeople.map(item => Item[item]);
+		return this.travellingPeople.map(item => getItemSymbol(item));
 	}
 
 	getElapsedTime(): number {
 		return Math.max(...this.travellingPeople);
+	}
+
+	getPlainText(): string {
+		return `[${this.getTravellingPeopleSymbols().join(
+			', ',
+		)}] (${this.getElapsedTime()})`;
 	}
 
 	/// Setters
