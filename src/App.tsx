@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Newline, Text} from 'ink';
-import Game from './game/CommonGame.tsx';
+import Game from './interface/CommonGame.tsx';
 import SelectInput from 'ink-select-input';
 
 enum Option {

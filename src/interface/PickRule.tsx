@@ -1,6 +1,6 @@
 import React from 'react';
 import SelectInput from 'ink-select-input';
-import Rule from '../engine/Rule.ts';
+import Rule from '../engine/Rule.js';
 
 interface PickRuleProps {
 	validRules: Array<Rule>;

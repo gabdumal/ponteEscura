@@ -1,7 +1,6 @@
 import React from 'react';
 import {Box, Text} from 'ink';
-import State, {RiverBank} from '../engine/State.ts';
-
+import State, {RiverBank} from '../engine/State.js';
 
 interface SceneryProps {
 	state: State;
