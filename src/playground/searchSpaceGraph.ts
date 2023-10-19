@@ -1,4 +1,4 @@
-import Graph from '../engine/Graph.ts';
+import Graph from '../engine/Graph/Graph.ts';
 import State from '../engine/State.ts';
 
 const searchSpace = new Graph();

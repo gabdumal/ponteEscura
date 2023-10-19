@@ -6,33 +6,29 @@ import {
 	toDot,
 	GraphAttributesObject,
 } from 'ts-graphviz';
-import {Format, toFile} from 'ts-graphviz/adapter';
+import BasicStructure from '../Basic/BasicStructure.ts';
 import GraphNode from './GraphNode.ts';
-import State from './State.ts';
 import GraphEdge from './GraphEdge.ts';
+import State from '../State.js';
 
-export default class Graph {
+export default class Graph extends BasicStructure {
 	/// Attributes
 	private nodes: Array<GraphNode>;
-	private nextNodeId = 0;
 
 	/// Constructor
 	constructor() {
+		super();
 		this.nodes = [];
 	}
 
-	/// Getters
-	public getNodes(): Array<GraphNode> {
-		return this.nodes;
+	/// Methods
+	protected instantiateNode(id: number, state: State): GraphNode {
+		return new GraphNode(id, state);
 	}
 
-	/// Setters
-
-	/// Methods
 	public addNode(state: State): GraphNode {
-		const node = new GraphNode(this.nextNodeId, state);
+		const node = this.createNode(state) as GraphNode;
 		this.nodes.push(node);
-		this.nextNodeId++;
 		return node;
 	}
 
@@ -50,19 +46,6 @@ export default class Graph {
 		return edges;
 	}
 
-	public createAllValidTransitions(node: GraphNode): void {
-		let edges = this.createValidTransitions(node);
-		while (edges.length > 0) {
-			node = edges[0].getTargetNode();
-			edges.shift();
-			const createdEdges = this.createValidTransitions(node);
-			for (const createdEdge of createdEdges) {
-				if (!createdEdge.getTargetNode().getState().getOutcome().isTerminal)
-					edges.push(createdEdge);
-			}
-		}
-	}
-
 	public exportToDot(attributes?: GraphAttributesObject): string {
 		attributes = {
 			splines: 'true',
@@ -74,10 +57,16 @@ export default class Graph {
 		const dotGraph = new GraphvizDigraph('G', attributes);
 
 		for (const node of this.nodes) {
+			const outcome = node.getState().getOutcome();
 			const dotNode = new GraphvizNode(node.getId().toString(), {
 				[_.label]: `${node.getId().toString()}. ${node
 					.getState()
 					.getPlainTextScenery()}`,
+				[_.color]: outcome.isTerminal
+					? outcome.win
+						? 'green'
+						: 'red'
+					: 'black',
 			});
 
 			dotGraph.addNode(dotNode);
@@ -100,14 +89,5 @@ export default class Graph {
 
 		const dot = toDot(dotGraph);
 		return dot;
-	}
-
-	/// Static Methods
-	public static async exportToFile(
-		dotString: string,
-		imageName: string,
-		format: Format,
-	): Promise<void> {
-		await toFile(dotString, `./${imageName}.${format}`, {format: format});
 	}
 }
