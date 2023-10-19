@@ -36,19 +36,22 @@ export default class GraphNode {
 	}
 
 	/// Methods
-	private addSourceEdge(source: GraphNode, rule: Rule): void {
-		const edge = new GraphEdge(source, this, rule);
+	private addSourceEdge(sourceNode: GraphNode, rule: Rule): GraphEdge {
+		const edge = new GraphEdge(sourceNode, this, rule);
 		this.sourceEdges.push(edge);
+		return edge;
 	}
 
-	private addTargetEdge(target: GraphNode, rule: Rule): void {
-		const edge = new GraphEdge(this, target, rule);
+	private addTargetEdge(targetNode: GraphNode, rule: Rule): GraphEdge {
+		const edge = new GraphEdge(this, targetNode, rule);
 		this.targetEdges.push(edge);
+		return edge;
 	}
 
-	public addEdge(target: GraphNode, rule: Rule): void {
+	public addEdge(target: GraphNode, rule: Rule): GraphEdge {
 		target.addSourceEdge(this, rule);
-		this.addTargetEdge(target, rule);
+		const targetEdge = this.addTargetEdge(target, rule);
+		return targetEdge;
 	}
 
 	public checkIfThereIsLoop(state: State): boolean {

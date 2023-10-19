@@ -4,10 +4,12 @@ import {
 	Node as GraphvizNode,
 	Edge as GraphvizEdge,
 	toDot,
+	GraphAttributesObject,
 } from 'ts-graphviz';
 import {Format, toFile} from 'ts-graphviz/adapter';
 import GraphNode from './GraphNode.ts';
 import State from './State.ts';
+import GraphEdge from './GraphEdge.ts';
 
 export default class Graph {
 	/// Attributes
@@ -34,29 +36,42 @@ export default class Graph {
 		return node;
 	}
 
-	public createValidTransitions(node: GraphNode, depth = 1): void {
-		if (depth <= 0) return;
+	public createValidTransitions(node: GraphNode): Array<GraphEdge> {
 		const validRules = node.getState().getValidRules();
+		const edges = [];
 		for (const rule of validRules) {
 			const newState = rule.transpose(node.getState());
-			const outcome = newState.getOutcome();
-			if (!outcome.isTerminal) {
-				if (!node.checkIfThereIsLoop(newState)) {
-					const newNode = this.addNode(newState);
-					node.addEdge(newNode, rule);
-					this.createValidTransitions(newNode, depth - 1);
-				}
+			if (!node.checkIfThereIsLoop(newState)) {
+				const newNode = this.addNode(newState);
+				const edge = node.addEdge(newNode, rule);
+				edges.push(edge);
+			}
+		}
+		return edges;
+	}
+
+	public createAllValidTransitions(node: GraphNode): void {
+		let edges = this.createValidTransitions(node);
+		while (edges.length > 0) {
+			node = edges[0].getTargetNode();
+			edges.shift();
+			const createdEdges = this.createValidTransitions(node);
+			for (const createdEdge of createdEdges) {
+				if (!createdEdge.getTargetNode().getState().getOutcome().isTerminal)
+					edges.push(createdEdge);
 			}
 		}
 	}
 
-	public exportToDot(): string {
-		const dotGraph = new GraphvizDigraph('G', {
-			[_.splines]: 'true',
-			[_.nodesep]: 0.5,
-			[_.ranksep]: 3,
-			[_.rankdir]: 'LR',
-		});
+	public exportToDot(attributes?: GraphAttributesObject): string {
+		attributes = {
+			splines: 'true',
+			nodesep: 0.5,
+			ranksep: 3,
+			rankdir: 'LR',
+			...attributes,
+		};
+		const dotGraph = new GraphvizDigraph('G', attributes);
 
 		for (const node of this.nodes) {
 			const dotNode = new GraphvizNode(node.getId().toString(), {
