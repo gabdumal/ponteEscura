@@ -1,44 +1,56 @@
 import React from 'react';
-import {Box, Text} from 'ink';
-import Scenery from './game/Scenery.tsx';
-import State from './engine/State.ts';
-import PickRule from './game/PickRule.tsx';
-import Rule from './engine/Rule.ts';
+import {Box, Newline, Text} from 'ink';
+import Game from './game/CommonGame.tsx';
+import SelectInput from 'ink-select-input';
+
+enum Option {
+	CommonGame,
+	IrrevocableSearch,
+}
 
 export default function App() {
-	const [state, setState] = React.useState<State>(new State());
-	const [isTerminal, setIsTerminal] = React.useState<boolean>(false);
-	const [victory, setVictory] = React.useState<boolean>(false);
-	const validRules = state.getValidRules();
+	const [selectedOption, setSelectedOption] = React.useState<Option>();
+	const options = [
+		{
+			label: 'Jogo Comum',
+			value: Option.CommonGame,
+		},
+		{
+			label: 'Busca irrevogável',
+			value: Option.IrrevocableSearch,
+		},
+	];
 
-	function handleSelect(rule: Rule) {
-		const newState = rule.transpose(state);
-		const {isTerminal, win} = newState.getOutcome();
-		setIsTerminal(isTerminal);
-		setVictory(win);
-		setState(newState);
+	function handleSelect(option: Option) {
+		setSelectedOption(option);
+	}
+
+	let interfaceComponent;
+
+	switch (selectedOption) {
+		case undefined:
+			interfaceComponent = (
+				<SelectInput
+					items={options}
+					onSelect={item => handleSelect(item.value)}
+				/>
+			);
+			break;
+		case Option.CommonGame:
+			interfaceComponent = <Game />;
+			break;
+		default:
+			break;
 	}
 
 	return (
 		<Box flexDirection="column">
-			<Box marginBottom={1}>
-				<Text bold inverse color={'yellowBright'}>
-					Ponte Escura
-				</Text>
+			<Text bold inverse color={'yellowBright'}>
+				Ponte Escura
+			</Text>
+			<Box flexDirection="column" marginTop={1}>
+				{interfaceComponent}
 			</Box>
-			<Scenery state={state} />
-			{isTerminal ? (
-				<Box>
-					<Text bold color={victory ? 'greenBright' : 'redBright'}>
-						{victory ? 'Vitória!' : 'Derrota!'}
-					</Text>
-				</Box>
-			) : (
-				<Box flexDirection="column">
-					<Text>Escolha uma regra:</Text>
-					<PickRule validRules={validRules} handleSelect={handleSelect} />
-				</Box>
-			)}
 		</Box>
 	);
 }
