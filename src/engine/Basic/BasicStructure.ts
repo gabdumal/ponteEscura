@@ -17,31 +17,26 @@ export default abstract class BasicStructure {
 	}
 
 	/// Methods
-	public incrementNextNodeId(): void {
+	private incrementNextNodeId(): void {
 		this.nextNodeId++;
 	}
 
-	public abstract addNode(state: State): BasicNode;
+	protected abstract instantiateNode(id: number, state: State): BasicNode;
 
-	public createValidTransitions(node: BasicNode): Array<BasicEdge> {
-		const validRules = node.getState().getValidRules();
-		const edges = [];
-		for (const rule of validRules) {
-			const newState = rule.transpose(node.getState());
-			if (!node.checkIfThereIsLoop(newState)) {
-				const newNode = this.addNode(newState);
-				const edge = node.addEdge(newNode, rule);
-				edges.push(edge);
-			}
-		}
-		return edges;
+	protected createNode(state: State): BasicNode {
+		const node = this.instantiateNode(this.nextNodeId, state);
+		this.incrementNextNodeId();
+		return node;
 	}
+
+	public abstract createValidTransitions(node: BasicNode): Array<BasicEdge>;
 
 	public createAllValidTransitions(node: BasicNode): void {
 		let edges = this.createValidTransitions(node);
 		while (edges.length > 0) {
-			node = edges[0].getTargetNode();
-			edges.shift();
+			const edge = edges.shift();
+			if (edge === undefined) continue;
+			node = edge.getTargetNode();
 			const createdEdges = this.createValidTransitions(node);
 			for (const createdEdge of createdEdges) {
 				if (!createdEdge.getTargetNode().getState().getOutcome().isTerminal)

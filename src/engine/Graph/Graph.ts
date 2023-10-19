@@ -8,6 +8,7 @@ import {
 } from 'ts-graphviz';
 import BasicStructure from '../Basic/BasicStructure.ts';
 import GraphNode from './GraphNode.ts';
+import GraphEdge from './GraphEdge.ts';
 import State from '../State.js';
 
 export default class Graph extends BasicStructure {
@@ -21,11 +22,28 @@ export default class Graph extends BasicStructure {
 	}
 
 	/// Methods
+	protected instantiateNode(id: number, state: State): GraphNode {
+		return new GraphNode(id, state);
+	}
+
 	public addNode(state: State): GraphNode {
-		const node = new GraphNode(super.getNextNodeId(), state);
+		const node = this.createNode(state) as GraphNode;
 		this.nodes.push(node);
-		super.incrementNextNodeId();
 		return node;
+	}
+
+	public createValidTransitions(node: GraphNode): Array<GraphEdge> {
+		const validRules = node.getState().getValidRules();
+		const edges = [];
+		for (const rule of validRules) {
+			const newState = rule.transpose(node.getState());
+			if (!node.checkIfThereIsLoop(newState)) {
+				const newNode = this.addNode(newState);
+				const edge = node.addEdge(newNode, rule);
+				edges.push(edge);
+			}
+		}
+		return edges;
 	}
 
 	public exportToDot(attributes?: GraphAttributesObject): string {

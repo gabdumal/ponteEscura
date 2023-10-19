@@ -11,7 +11,8 @@
 	},
 	"scripts": {
 		"play": "ts-node src/cli.tsx",
-		"playground:search-space": "ts-node src/playground/searchSpace.ts"
+		"playground:search-space-graph": "ts-node src/playground/searchSpaceGraph.ts",
+		"playground:search-space-tree": "ts-node src/playground/searchSpaceTree.ts"
 	},
 	"files": [
 		"dist"
