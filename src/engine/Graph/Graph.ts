@@ -57,10 +57,16 @@ export default class Graph extends BasicStructure {
 		const dotGraph = new GraphvizDigraph('G', attributes);
 
 		for (const node of this.nodes) {
+			const outcome = node.getState().getOutcome();
 			const dotNode = new GraphvizNode(node.getId().toString(), {
 				[_.label]: `${node.getId().toString()}. ${node
 					.getState()
 					.getPlainTextScenery()}`,
+				[_.color]: outcome.isTerminal
+					? outcome.win
+						? 'green'
+						: 'red'
+					: 'black',
 			});
 
 			dotGraph.addNode(dotNode);
