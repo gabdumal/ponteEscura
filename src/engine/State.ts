@@ -43,32 +43,37 @@ export default class State {
 		return this.remainingTime;
 	}
 
-	getValidRules() {
+	public getValidRules() {
 		const lampPosition = this.getLampPosition();
 		const currentRiverBank = this.getRiverBankItems(lampPosition);
 
 		const validRules: Array<Rule> = [];
+		let currentRule;
 		for (let i = currentRiverBank.length - 1; i >= 0; i--) {
 			const item1 = currentRiverBank[i];
 			if (item1 === Item.Lamp) continue;
-			validRules.push(Problem.getRule(item1));
+			currentRule = Problem.getRule(item1);
+			if (this.remainingTime - currentRule.getElapsedTime() < 0) continue;
+			validRules.push(currentRule);
 			for (let j = i - 1; j >= 0; j--) {
 				const item2 = currentRiverBank[j];
 				if (item2 === Item.Lamp) continue;
-				validRules.push(Problem.getRule(item1, item2));
+				currentRule = Problem.getRule(item1, item2);
+				if (this.remainingTime - currentRule.getElapsedTime() < 0) continue;
+				validRules.push(currentRule);
 			}
 		}
 
 		return validRules;
 	}
 
-	getLampPosition() {
+	public getLampPosition() {
 		return this.initialRiverBank.indexOf(Item.Lamp) !== -1
 			? RiverBank.Initial
 			: RiverBank.Final;
 	}
 
-	getOutcome(): Outcome {
+	public getOutcome(): Outcome {
 		if (this.initialRiverBank.length === 0) {
 			if (this.remainingTime >= 0) return {isTerminal: true, win: true};
 			else return {isTerminal: true, win: false};
@@ -78,7 +83,7 @@ export default class State {
 		}
 	}
 
-	getPlainTextScenery() {
+	public getPlainTextScenery() {
 		const initialRiverBank = this.getRiverBankSymbols(RiverBank.Initial);
 		const finalRiverBank = this.getRiverBankSymbols(RiverBank.Final);
 

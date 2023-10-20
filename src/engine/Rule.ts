@@ -19,23 +19,23 @@ export default class Rule {
 		return this.id;
 	}
 
-	getTravellingPeople(): Array<Item> {
+	public getTravellingPeople(): Array<Item> {
 		return this.travellingPeople;
 	}
 
-	getTravellingPeopleNames(): Array<string> {
+	public getTravellingPeopleNames(): Array<string> {
 		return this.travellingPeople.map(item => Problem.getItemName(item));
 	}
 
-	getTravellingPeopleSymbols(): Array<string> {
+	public getTravellingPeopleSymbols(): Array<string> {
 		return this.travellingPeople.map(item => Problem.getItemSymbol(item));
 	}
 
-	getElapsedTime(): number {
+	public getElapsedTime(): number {
 		return Math.max(...this.travellingPeople);
 	}
 
-	getPlainText(): string {
+	public getPlainText(): string {
 		return `[${this.getTravellingPeopleSymbols().join(
 			', ',
 		)}] (${this.getElapsedTime()})`;

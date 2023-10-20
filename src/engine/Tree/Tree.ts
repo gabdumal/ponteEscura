@@ -32,6 +32,8 @@ export default class Tree extends BasicStructure {
 	}
 
 	public createValidTransitions(node: TreeNode): Array<TreeEdge> {
+		const outcome = node.getState().getOutcome();
+		if (outcome.isTerminal) return [];
 		const validRules = node.getState().getValidRules();
 		const edges = [];
 		for (const rule of validRules) {
@@ -47,10 +49,10 @@ export default class Tree extends BasicStructure {
 
 	public exportToDot({
 		attributes,
-		solutionNode,
+		solutionPathNodes,
 	}: {
 		attributes?: GraphAttributesObject;
-		solutionNode?: TreeNode;
+		solutionPathNodes?: Array<TreeNode>;
 	}): string {
 		attributes = {
 			splines: 'true',
@@ -63,56 +65,70 @@ export default class Tree extends BasicStructure {
 
 		const edges: Array<TreeEdge> = [];
 		if (this.root !== null) {
-			const dotRootNode = new GraphvizNode(this.root.getId().toString(), {
-				[_.label]: `${this.root.getId().toString()}. ${this.root
-					.getState()
-					.getPlainTextScenery()}`,
-				[_.color]: Tree.getDotNodeColor(this.root),
-			});
+			const dotRootNode = Tree.getDotNode(
+				this.root,
+				solutionPathNodes !== undefined &&
+					solutionPathNodes.includes(this.root),
+			);
 			dotGraph.addNode(dotRootNode);
 			edges.push(...this.root.getTargetEdges());
 
 			while (edges.length > 0) {
 				const edge = edges.shift();
 				if (edge === undefined) continue;
-				const dotSourceNode = dotGraph.getNode(
-					edge.getSourceNode().getId().toString(),
-				);
+				const sourceNode = edge.getSourceNode() as TreeNode;
+				const dotSourceNode = dotGraph.getNode(sourceNode.getId().toString());
 				if (dotSourceNode === undefined) continue;
 
-				const targetNode = edge.getTargetNode();
+				const targetNode = edge.getTargetNode() as TreeNode;
 				edges.push(...targetNode.getTargetEdges());
-				const dotTargetNode = new GraphvizNode(targetNode.getId().toString(), {
-					[_.label]: `${targetNode.getId().toString()}. ${targetNode
-						.getState()
-						.getPlainTextScenery()}`,
-					[_.color]: Tree.getDotNodeColor(targetNode),
-				});
+				const targetNodeIsInSolutionPath =
+					solutionPathNodes !== undefined &&
+					solutionPathNodes.includes(targetNode);
+				const dotTargetNode = Tree.getDotNode(
+					targetNode,
+					solutionPathNodes !== undefined &&
+						solutionPathNodes.includes(targetNode),
+				);
 				dotGraph.addNode(dotTargetNode);
 
 				const dotEdge = new GraphvizEdge([dotSourceNode, dotTargetNode], {
 					[_.label]: `${edge.getRule().getId()}. ${edge
 						.getRule()
 						.getPlainText()}`,
+					[_.color]: targetNodeIsInSolutionPath ? 'orange' : 'black',
 				});
 				dotGraph.addEdge(dotEdge);
 			}
 		}
 
-		// Paint solution path
-		if (solutionNode !== undefined) {
-			let currentNode = solutionNode;
-			do {
-				const dotCurrentNode = dotGraph.getNode(currentNode.getId().toString());
-				if (dotCurrentNode === undefined) break;
-				dotCurrentNode.attributes.set('color', 'orange');
-				const sourceEdge = currentNode.getSourceEdge();
-				if (sourceEdge === null) break;
-				currentNode = sourceEdge.getSourceNode() as TreeNode;
-			} while (currentNode !== null);
-		}
-
 		const dot = toDot(dotGraph);
 		return dot;
+	}
+
+	/// Static methods
+	public static getAscendingPath(node: TreeNode): Array<TreeEdge> {
+		const path = [];
+		let currentNode = node;
+		while (currentNode !== null) {
+			const sourceEdge = currentNode.getSourceEdge();
+			if (sourceEdge === null) break;
+			path.unshift(sourceEdge);
+			currentNode = sourceEdge.getSourceNode() as TreeNode;
+		}
+		return path;
+	}
+
+	private static getDotNode(
+		node: TreeNode,
+		isInSolutionPath: boolean = false,
+	): GraphvizNode {
+		const dotNode = new GraphvizNode(node.getId().toString(), {
+			[_.label]: `${node.getId().toString()}. ${node
+				.getState()
+				.getPlainTextScenery()}`,
+			[_.color]: isInSolutionPath ? 'orange' : Tree.getDotNodeColor(node),
+		});
+		return dotNode;
 	}
 }

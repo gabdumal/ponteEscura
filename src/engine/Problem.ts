@@ -1,3 +1,4 @@
+import BasicNode from './Basic/BasicNode.ts';
 import Rule from './Rule.ts';
 
 export enum Item {
@@ -118,5 +119,12 @@ export default class Problem {
 				break;
 		}
 		return itemSymbol;
+	}
+
+	/// Static methods
+	public static isSolution(node: BasicNode) {
+		const state = node.getState();
+		const outcome = state.getOutcome();
+		return outcome.isTerminal && outcome.win;
 	}
 }
