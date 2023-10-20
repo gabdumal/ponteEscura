@@ -91,7 +91,9 @@ export default class Tree extends BasicStructure {
 				dotGraph.addNode(dotTargetNode);
 
 				const dotEdge = new GraphvizEdge([dotSourceNode, dotTargetNode], {
-					[_.label]: edge.getRule().getPlainText(),
+					[_.label]: `${edge.getRule().getId()}. ${edge
+						.getRule()
+						.getPlainText()}`,
 				});
 				dotGraph.addEdge(dotEdge);
 			}

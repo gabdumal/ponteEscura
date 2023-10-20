@@ -1,6 +1,6 @@
-import {Item, Outcome} from '../types.ts';
+import {Outcome} from '../types.ts';
+import Problem, {Item} from './Problem.ts';
 import Rule from './Rule.ts';
-import {getItemSymbol} from './util.ts';
 
 export enum RiverBank {
 	Initial,
@@ -35,8 +35,8 @@ export default class State {
 
 	public getRiverBankSymbols(riverBank: RiverBank): Array<string> {
 		if (riverBank === RiverBank.Initial)
-			return this.initialRiverBank.map(item => getItemSymbol(item));
-		else return this.finalRiverBank.map(item => getItemSymbol(item));
+			return this.initialRiverBank.map(item => Problem.getItemSymbol(item));
+		else return this.finalRiverBank.map(item => Problem.getItemSymbol(item));
 	}
 
 	public getRemainingTime(): number {
@@ -51,11 +51,11 @@ export default class State {
 		for (let i = currentRiverBank.length - 1; i >= 0; i--) {
 			const item1 = currentRiverBank[i];
 			if (item1 === Item.Lamp) continue;
-			validRules.push(new Rule(item1));
+			validRules.push(Problem.getRule(item1));
 			for (let j = i - 1; j >= 0; j--) {
 				const item2 = currentRiverBank[j];
 				if (item2 === Item.Lamp) continue;
-				validRules.push(new Rule(item1, item2));
+				validRules.push(Problem.getRule(item1, item2));
 			}
 		}
 

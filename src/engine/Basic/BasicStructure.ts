@@ -51,7 +51,7 @@ export default abstract class BasicStructure {
 		attributes?: GraphAttributesObject;
 	}): string;
 
-	/// Static Methods
+	/// Static methods
 	public static async exportToFile(
 		dotString: string,
 		imageName: string,
@@ -60,7 +60,6 @@ export default abstract class BasicStructure {
 		await toFile(dotString, `./${imageName}.${format}`, {format: format});
 	}
 
-	/// Static Methods
 	protected static getDotNodeColor(node: BasicNode): string {
 		const outcome = node.getState().getOutcome();
 		return outcome.isTerminal ? (outcome.win ? 'green' : 'red') : 'black';

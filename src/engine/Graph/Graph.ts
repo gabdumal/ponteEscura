@@ -80,7 +80,9 @@ export default class Graph extends BasicStructure {
 				);
 				if (dotTargetNode === undefined) continue;
 				const dotEdge = new GraphvizEdge([dotSourceNode, dotTargetNode], {
-					[_.label]: edge.getRule().getPlainText(),
+					[_.label]: `${edge.getRule().getId()}. ${edge
+						.getRule()
+						.getPlainText()}`,
 				});
 				dotGraph.addEdge(dotEdge);
 			}

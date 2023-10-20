@@ -1,29 +1,34 @@
-import {Item} from '../types.ts';
+import Problem, {Item} from './Problem.ts';
 import State, {RiverBank} from './State.ts';
-import {getItemName, getItemSymbol} from './util.ts';
 
 export default class Rule {
 	/// Attributes
+	private id: number;
 	private travellingPeople: Array<Item>;
 
 	/// Constructor
-	constructor(firstPerson: Item, secondPerson?: Item) {
+	constructor(id: number, firstPerson: Item, secondPerson?: Item) {
+		this.id = id;
 		this.travellingPeople = secondPerson
 			? [firstPerson, secondPerson].sort((a, b) => a - b)
 			: [firstPerson];
 	}
 
 	/// Getters
+	public getId(): number {
+		return this.id;
+	}
+
 	getTravellingPeople(): Array<Item> {
 		return this.travellingPeople;
 	}
 
 	getTravellingPeopleNames(): Array<string> {
-		return this.travellingPeople.map(item => getItemName(item));
+		return this.travellingPeople.map(item => Problem.getItemName(item));
 	}
 
 	getTravellingPeopleSymbols(): Array<string> {
-		return this.travellingPeople.map(item => getItemSymbol(item));
+		return this.travellingPeople.map(item => Problem.getItemSymbol(item));
 	}
 
 	getElapsedTime(): number {
