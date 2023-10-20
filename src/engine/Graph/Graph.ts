@@ -46,7 +46,11 @@ export default class Graph extends BasicStructure {
 		return edges;
 	}
 
-	public exportToDot(attributes?: GraphAttributesObject): string {
+	public exportToDot({
+		attributes,
+	}: {
+		attributes?: GraphAttributesObject;
+	}): string {
 		attributes = {
 			splines: 'true',
 			nodesep: 0.5,
@@ -57,16 +61,11 @@ export default class Graph extends BasicStructure {
 		const dotGraph = new GraphvizDigraph('G', attributes);
 
 		for (const node of this.nodes) {
-			const outcome = node.getState().getOutcome();
 			const dotNode = new GraphvizNode(node.getId().toString(), {
 				[_.label]: `${node.getId().toString()}. ${node
 					.getState()
 					.getPlainTextScenery()}`,
-				[_.color]: outcome.isTerminal
-					? outcome.win
-						? 'green'
-						: 'red'
-					: 'black',
+				[_.color]: Graph.getDotNodeColor(node),
 			});
 
 			dotGraph.addNode(dotNode);

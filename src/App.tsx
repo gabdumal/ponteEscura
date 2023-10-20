@@ -1,10 +1,12 @@
 import React from 'react';
-import {Box, Newline, Text} from 'ink';
-import Game from './interface/CommonGame.tsx';
+import {Box, Text} from 'ink';
+import CommonGame from './interface/CommonGame.tsx';
 import SelectInput from 'ink-select-input';
+import DynamicTreeGame from './interface/DynamicTreeGame.tsx';
 
 enum Option {
 	CommonGame,
+	DynamicTreeGame,
 	IrrevocableSearch,
 }
 
@@ -14,6 +16,10 @@ export default function App() {
 		{
 			label: 'Jogo Comum',
 			value: Option.CommonGame,
+		},
+		{
+			label: 'Árvore dinâmica',
+			value: Option.DynamicTreeGame,
 		},
 		{
 			label: 'Busca irrevogável',
@@ -37,7 +43,10 @@ export default function App() {
 			);
 			break;
 		case Option.CommonGame:
-			interfaceComponent = <Game />;
+			interfaceComponent = <CommonGame />;
+			break;
+		case Option.DynamicTreeGame:
+			interfaceComponent = <DynamicTreeGame />;
 			break;
 		default:
 			break;

@@ -45,7 +45,13 @@ export default class Tree extends BasicStructure {
 		return edges;
 	}
 
-	public exportToDot(attributes?: GraphAttributesObject): string {
+	public exportToDot({
+		attributes,
+		solutionNode,
+	}: {
+		attributes?: GraphAttributesObject;
+		solutionNode?: TreeNode;
+	}): string {
 		attributes = {
 			splines: 'true',
 			nodesep: 0.5,
@@ -57,16 +63,11 @@ export default class Tree extends BasicStructure {
 
 		const edges: Array<TreeEdge> = [];
 		if (this.root !== null) {
-			const rootOutcome = this.root.getState().getOutcome();
 			const dotRootNode = new GraphvizNode(this.root.getId().toString(), {
 				[_.label]: `${this.root.getId().toString()}. ${this.root
 					.getState()
 					.getPlainTextScenery()}`,
-				[_.color]: rootOutcome.isTerminal
-					? rootOutcome.win
-						? 'green'
-						: 'red'
-					: 'black',
+				[_.color]: Tree.getDotNodeColor(this.root),
 			});
 			dotGraph.addNode(dotRootNode);
 			edges.push(...this.root.getTargetEdges());
@@ -80,17 +81,12 @@ export default class Tree extends BasicStructure {
 				if (dotSourceNode === undefined) continue;
 
 				const targetNode = edge.getTargetNode();
-				const targetOutcome = targetNode.getState().getOutcome();
 				edges.push(...targetNode.getTargetEdges());
 				const dotTargetNode = new GraphvizNode(targetNode.getId().toString(), {
 					[_.label]: `${targetNode.getId().toString()}. ${targetNode
 						.getState()
 						.getPlainTextScenery()}`,
-					[_.color]: targetOutcome.isTerminal
-						? targetOutcome.win
-							? 'green'
-							: 'red'
-						: 'black',
+					[_.color]: Tree.getDotNodeColor(targetNode),
 				});
 				dotGraph.addNode(dotTargetNode);
 
@@ -100,6 +96,20 @@ export default class Tree extends BasicStructure {
 				dotGraph.addEdge(dotEdge);
 			}
 		}
+
+		// Paint solution path
+		if (solutionNode !== undefined) {
+			let currentNode = solutionNode;
+			do {
+				const dotCurrentNode = dotGraph.getNode(currentNode.getId().toString());
+				if (dotCurrentNode === undefined) break;
+				dotCurrentNode.attributes.set('color', 'orange');
+				const sourceEdge = currentNode.getSourceEdge();
+				if (sourceEdge === null) break;
+				currentNode = sourceEdge.getSourceNode() as TreeNode;
+			} while (currentNode !== null);
+		}
+
 		const dot = toDot(dotGraph);
 		return dot;
 	}
