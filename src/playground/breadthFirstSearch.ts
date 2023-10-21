@@ -1,4 +1,4 @@
-import BreadthFirstSearch from '../engine/BreadthFirstSearch/BreadthFirstSearch.ts';
+import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.ts';
 import Tree from '../engine/Tree/Tree.ts';
 import TreeNode from '../engine/Tree/TreeNode.ts';
 

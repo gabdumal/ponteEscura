@@ -37,7 +37,15 @@ export default function DynamicTreeGame() {
 		) {
 			setIsTerminal(true);
 			setVictory(outcome.win);
-			const dot = tree.exportToDot({solutionNode: targetNode});
+			const solutionPath = Tree.getAscendingPath(targetNode);
+			let solutionPathNodes: Array<TreeNode> = [];
+			if (solutionPath !== null) {
+				solutionPathNodes.push(solutionPath[0].getSourceNode() as TreeNode);
+				solutionPath.forEach(edge =>
+					solutionPathNodes.push(edge.getTargetNode() as TreeNode),
+				);
+			}
+			const dot = tree.exportToDot({solutionPathNodes: solutionPathNodes});
 			Tree.exportToFile(dot, 'images/dynamicTreeGame', 'svg');
 		}
 	}

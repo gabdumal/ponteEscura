@@ -3,11 +3,16 @@ import {Box, Text} from 'ink';
 import CommonGame from './interface/CommonGame.tsx';
 import SelectInput from 'ink-select-input';
 import DynamicTreeGame from './interface/DynamicTreeGame.tsx';
+import ListsSearchProcedure from './interface/ListsSearchProcedure.tsx';
+import DepthFirstSearch from './engine/Search/DepthFirstSearch.ts';
+import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.ts';
 
 enum Option {
 	CommonGame,
 	DynamicTreeGame,
 	IrrevocableSearch,
+	BreadthFirstSearch,
+	DepthFirstSearch,
 }
 
 export default function App() {
@@ -24,6 +29,14 @@ export default function App() {
 		{
 			label: 'Busca irrevogável',
 			value: Option.IrrevocableSearch,
+		},
+		{
+			label: 'Busca em largura',
+			value: Option.BreadthFirstSearch,
+		},
+		{
+			label: 'Busca em profundidade',
+			value: Option.DepthFirstSearch,
 		},
 	];
 
@@ -47,6 +60,16 @@ export default function App() {
 			break;
 		case Option.DynamicTreeGame:
 			interfaceComponent = <DynamicTreeGame />;
+			break;
+		case Option.BreadthFirstSearch:
+			interfaceComponent = (
+				<ListsSearchProcedure searchAlgorithm={new BreadthFirstSearch()} />
+			);
+			break;
+		case Option.DepthFirstSearch:
+			interfaceComponent = (
+				<ListsSearchProcedure searchAlgorithm={new DepthFirstSearch()} />
+			);
 			break;
 		default:
 			break;
