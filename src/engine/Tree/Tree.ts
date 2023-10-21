@@ -119,7 +119,7 @@ export default class Tree extends BasicStructure {
 		return path;
 	}
 
-	private static getDotNode(
+	public static getDotNode(
 		node: TreeNode,
 		isInSolutionPath: boolean = false,
 	): GraphvizNode {
@@ -130,5 +130,24 @@ export default class Tree extends BasicStructure {
 			[_.color]: isInSolutionPath ? 'orange' : Tree.getDotNodeColor(node),
 		});
 		return dotNode;
+	}
+
+	public static exportNodesListToDot(
+		nodesList: Array<TreeNode>,
+		attributes?: GraphAttributesObject,
+	): string {
+		attributes = {
+			splines: 'true',
+			nodesep: 0.5,
+			ranksep: 3,
+			rankdir: 'LR',
+			...attributes,
+		};
+		const dotGraph = new GraphvizDigraph('G', attributes);
+		for (const node of nodesList) {
+			const dotNode = Tree.getDotNode(node, false);
+			dotGraph.addNode(dotNode);
+		}
+		return toDot(dotGraph);
 	}
 }

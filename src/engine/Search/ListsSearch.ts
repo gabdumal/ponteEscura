@@ -1,28 +1,32 @@
+import {
+	attribute as _,
+	Graph as GraphvizGraph,
+	Node as GraphvizNode,
+	Edge as GraphvizEdge,
+	toDot,
+	GraphAttributesObject,
+} from 'ts-graphviz';
 import Problem from '../Problem.ts';
 import State from '../State.ts';
 import Tree from '../Tree/Tree.ts';
 import TreeEdge from '../Tree/TreeEdge.ts';
 import TreeNode from '../Tree/TreeNode.ts';
 
-export default class BreadthFirstSearch {
+export default abstract class ListsSearch {
 	/// Attributes
+	protected abstract algorithmName: string;
 	private tree: Tree;
 	private openNodes: Array<TreeNode>;
 	private closedNodes: Array<TreeNode>;
 	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor
-	constructor() {
+	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
 		const state = new State();
 		this.tree = new Tree(state);
 		this.openNodes = [this.tree.getRoot()];
 		this.closedNodes = [];
-		this.sortingFunction = (a: TreeEdge, b: TreeEdge) => {
-			return (
-				b.getTargetNode().getState().getRemainingTime() -
-				a.getTargetNode().getState().getRemainingTime()
-			);
-		};
+		this.sortingFunction = sortingFunction;
 	}
 
 	/// Getters
@@ -38,9 +42,19 @@ export default class BreadthFirstSearch {
 		return this.closedNodes;
 	}
 
+	public abstract getCurrentNode(): TreeNode;
+
+	public getAlgorithmName(): string {
+		return this.algorithmName;
+	}
+
+	public getSafeAlgorithmName(): string {
+		return this.algorithmName.replace(/ /g, '_');
+	}
+
 	/// Methods
 	private doIteration(): Array<TreeEdge> | null {
-		const currentNode = this.openNodes.shift();
+		const currentNode = this.getCurrentNode();
 		if (currentNode === undefined) return null;
 		this.closedNodes.push(currentNode);
 
