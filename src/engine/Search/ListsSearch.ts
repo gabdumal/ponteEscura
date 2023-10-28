@@ -16,6 +16,7 @@ export default abstract class ListsSearch {
 	/// Attributes
 	protected abstract algorithmName: string;
 	private tree: Tree;
+	protected currentNode: TreeNode | null;
 	private openNodes: Array<TreeNode>;
 	private closedNodes: Array<TreeNode>;
 	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
@@ -24,6 +25,7 @@ export default abstract class ListsSearch {
 	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
 		const state = new State();
 		this.tree = new Tree(state);
+		this.currentNode = null;
 		this.openNodes = [this.tree.getRoot()];
 		this.closedNodes = [];
 		this.sortingFunction = sortingFunction;
@@ -42,7 +44,7 @@ export default abstract class ListsSearch {
 		return this.closedNodes;
 	}
 
-	public abstract getCurrentNode(): TreeNode;
+	public abstract getCurrentNode(remove: boolean): TreeNode | null;
 
 	public getAlgorithmName(): string {
 		return this.algorithmName;
@@ -54,14 +56,14 @@ export default abstract class ListsSearch {
 
 	/// Methods
 	private doIteration(): Array<TreeEdge> | null {
-		const currentNode = this.getCurrentNode();
-		if (currentNode === undefined) return null;
-		this.closedNodes.push(currentNode);
+		const currentNode = this.getCurrentNode(true);
+		if (currentNode === null) return null;
 
 		if (Problem.isSolution(currentNode)) {
 			const solutionPath = Tree.getAscendingPath(currentNode);
 			return solutionPath;
 		} else {
+			this.closedNodes.push(currentNode);
 			const validTransitions = this.tree.createValidTransitions(currentNode);
 			validTransitions.sort(this.sortingFunction);
 			for (const transition of validTransitions) {

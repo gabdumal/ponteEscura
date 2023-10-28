@@ -18,7 +18,11 @@ export default class BreadthFirstSearch extends ListsSearch {
 	}
 
 	/// Methods
-	public getCurrentNode(): TreeNode {
-		return this.getOpenNodes().shift() as TreeNode;
+	public getCurrentNode(remove: boolean): TreeNode | null {
+		if (!remove) return this.currentNode;
+		const currentNode = this.getOpenNodes().shift();
+		if (currentNode === undefined) return null;
+		this.currentNode = currentNode;
+		return currentNode;
 	}
 }

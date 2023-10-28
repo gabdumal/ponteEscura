@@ -18,7 +18,11 @@ export default class DepthFirstSearch extends ListsSearch {
 	}
 
 	/// Methods
-	public getCurrentNode(): TreeNode {
-		return this.getOpenNodes().pop() as TreeNode;
+	public getCurrentNode(remove: boolean): TreeNode | null {
+		if (!remove) return this.currentNode;
+		const currentNode = this.getOpenNodes().pop();
+		if (currentNode === undefined) return null;
+		this.currentNode = currentNode;
+		return currentNode;
 	}
 }
