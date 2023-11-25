@@ -1,0 +1,135 @@
+@startuml
+
+    ' Config
+    hide empty members
+    ' skinparam classAttributeIconSize 0
+    ' left to right direction
+
+
+    ' Definições
+
+    enum Item {
+        Lamp = 0
+	    Athlete = 1
+	    Boy = 3
+	    Lord = 6
+	    Woman = 8
+	    Lady = 12
+    }
+
+    enum RiverBank {
+        Initial
+        Final
+    }
+
+    struct Outcome {
+        isTerminal: boolean
+        win: boolean
+    }
+
+
+    ' Pacotes
+
+    package Domain <<Rectangle>> {
+        class Rule
+        class State
+        class Problem
+    }
+
+    package Structure <<Rectangle>> {
+        class BasicEdge
+        class BasicNode
+        class BasicStructure
+
+        package Tree <<Rectangle>> {
+            class TreeEdge
+            class TreeNode
+            class Tree
+        }
+
+    }
+
+
+    ' Classes
+
+    class Rule {
+        -id: number
+        -travellingPeople: Item[]
+        +getElapsedTime(): number
+        +transpose(state: State): State
+    }
+
+    class State {
+        -initialRiverBank: Item[]
+        -finalRiverBank: Item[]
+        -remainingTime: number
+        +getValidRules(): Rule[]
+        +getOutcome(): Outcome
+        +equalByItems(state: State): boolean
+        +getLampPosition(): RiverBank
+    }
+
+    class Problem {
+        -{static}rules: Rule[]
+        +{static}getRule(firstPerson: Item, secondPerson?: Item): Rule
+        +{static}isSolution(state: State): boolean
+    }
+
+    abstract class BasicEdge {
+        -sourceNode: BasicNode
+        -targetNode: BasicNode
+        -rule: Rule
+    }
+
+    abstract class BasicNode {
+        -id: number
+        -state: State
+        -targetEdges: BasicEdge[]
+        #{abstract}addSourceEdge(sourceNode: BasicNode, rule: Rule): BasicEdge | null
+        -addTargetEdge(targetNode: BasicNode, rule: Rule): BasicEdge
+        +addEdge(targetNode: BasicNode, rule: Rule): BasicEdge
+        +{abstract}checkIfThereIsLoop(state: State): boolean
+    }
+
+    abstract class BasicStructure {
+        -nextNodeId: number
+        #{abstract}instantiateNode(id: number, state: State): BasicNode
+        #createNode(state: State): BasicNode
+        +{abstract}createValidTransitions(node: BasicNode): BasicEdge[]
+        +{abstract}exportToDot(): string
+    }
+
+    class TreeEdge {}
+
+    class TreeNode {
+        -sourceEdge: TreeEdge | null
+    }
+
+    class Tree {
+        -rootNode: TreeNode
+        +{static}getAscendingPath(node: TreeNode): TreeEdge[]
+    }
+
+
+    ' Relacionamentos
+
+    Rule "1" --> "0..n" BasicEdge : Represents
+    Problem "1" *-- "1..n" Rule
+    BasicNode "1" --> "0..n" BasicEdge : Has Target
+    BasicNode "1" --> "1" State : Has State
+    TreeNode "1" --> "0..1" TreeEdge : Has source
+    Tree "1" --> "1" TreeNode : Has root
+    TreeEdge --|> BasicEdge
+    TreeNode --|> BasicNode
+    Tree --|> BasicStructure
+
+    Structure -[hidden]down-> RiverBank
+    RiverBank -[hidden]right-> Item
+    Item -[hidden]right-> Outcome
+
+    ' Funcionario -[hidden]-> Falha
+    ' Cargo -right[hidden]-> Status
+    ' Status -right[hidden]-> TipoAD
+
+
+@enduml

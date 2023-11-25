@@ -59,7 +59,7 @@ export default abstract class ListsSearch {
 		const currentNode = this.getCurrentNode(true);
 		if (currentNode === null) return null;
 
-		if (Problem.isSolution(currentNode)) {
+		if (Problem.isSolution(currentNode.getState())) {
 			const solutionPath = Tree.getAscendingPath(currentNode);
 			return solutionPath;
 		} else {

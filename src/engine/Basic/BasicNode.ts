@@ -45,11 +45,11 @@ export default abstract class BasicNode {
 		return edge;
 	}
 
-	public addEdge(target: BasicNode, rule: Rule): BasicEdge {
-		const sourceEdge = target.addSourceEdge(this, rule);
+	public addEdge(targetNode: BasicNode, rule: Rule): BasicEdge {
+		const sourceEdge = targetNode.addSourceEdge(this, rule);
 		if (sourceEdge === null) throw new Error('Cannot add edge');
 		else {
-			const targetEdge = this.addTargetEdge(target, rule);
+			const targetEdge = this.addTargetEdge(targetNode, rule);
 			return targetEdge;
 		}
 	}

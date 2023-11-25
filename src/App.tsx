@@ -10,7 +10,7 @@ import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.ts';
 enum Option {
 	CommonGame,
 	DynamicTreeGame,
-	IrrevocableSearch,
+	Backtracking,
 	BreadthFirstSearch,
 	DepthFirstSearch,
 }
@@ -27,8 +27,8 @@ export default function App() {
 			value: Option.DynamicTreeGame,
 		},
 		{
-			label: 'Busca irrevogável',
-			value: Option.IrrevocableSearch,
+			label: 'Backtracking',
+			value: Option.Backtracking,
 		},
 		{
 			label: 'Busca em largura',

@@ -1,5 +1,5 @@
-import BasicNode from './Basic/BasicNode.ts';
 import Rule from './Rule.ts';
+import State from './State.ts';
 
 export enum Item {
 	Lamp = 0,
@@ -122,8 +122,7 @@ export default class Problem {
 	}
 
 	/// Static methods
-	public static isSolution(node: BasicNode) {
-		const state = node.getState();
+	public static isSolution(state: State) {
 		const outcome = state.getOutcome();
 		return outcome.isTerminal && outcome.win;
 	}
