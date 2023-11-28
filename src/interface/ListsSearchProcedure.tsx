@@ -7,6 +7,7 @@ import ListsSearch from '../engine/Search/ListsSearch.js';
 
 interface ListsSearchProcedureProps {
 	searchAlgorithm: ListsSearch;
+	searchAlgorithmSafeName: string;
 }
 export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
 	useEffect(() => {
@@ -19,7 +20,7 @@ export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
 			);
 		}
 
-		const directory = `images/${props.searchAlgorithm.getSafeAlgorithmName()}`;
+		const directory = `images/${props.searchAlgorithmSafeName}`;
 		fs.mkdirSync(directory, {recursive: true});
 
 		const dotTreeString = props.searchAlgorithm

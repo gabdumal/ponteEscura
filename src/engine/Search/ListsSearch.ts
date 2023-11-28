@@ -1,30 +1,20 @@
-import {
-	attribute as _,
-	Graph as GraphvizGraph,
-	Node as GraphvizNode,
-	Edge as GraphvizEdge,
-	toDot,
-	GraphAttributesObject,
-} from 'ts-graphviz';
+import {attribute as _} from 'ts-graphviz';
 import Problem from '../Problem.js';
-import State from '../State.js';
 import Tree from '../Tree/Tree.js';
 import TreeEdge from '../Tree/TreeEdge.js';
 import TreeNode from '../Tree/TreeNode.js';
+import Search from './Search.js';
 
-export default abstract class ListsSearch {
+export default abstract class ListsSearch extends Search {
 	/// Attributes
-	protected abstract algorithmName: string;
-	public tree: Tree;
 	protected currentNode: TreeNode | null;
-	public openNodes: Array<TreeNode>;
-	public closedNodes: Array<TreeNode>;
+	protected openNodes: Array<TreeNode>;
+	protected closedNodes: Array<TreeNode>;
 	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor
 	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
-		const state = new State();
-		this.tree = new Tree(state);
+		super();
 		this.currentNode = null;
 		this.openNodes = [this.tree.getRoot()];
 		this.closedNodes = [];
@@ -32,8 +22,8 @@ export default abstract class ListsSearch {
 	}
 
 	/// Getters
-	public getTree(): Tree {
-		return this.tree;
+	public static getAlgorithmName(): string {
+		return 'Lists Search';
 	}
 
 	public getOpenNodes(): Array<TreeNode> {
@@ -46,15 +36,21 @@ export default abstract class ListsSearch {
 
 	public abstract getCurrentNode(remove: boolean): TreeNode | null;
 
-	public getAlgorithmName(): string {
-		return this.algorithmName;
-	}
-
-	public getSafeAlgorithmName(): string {
-		return this.algorithmName.replace(/ /g, '_');
-	}
-
 	/// Methods
+	public search(maxIterations: number = Infinity): Array<TreeEdge> {
+		let solutionPath = null;
+		let aux = 0;
+		while (
+			aux < maxIterations &&
+			this.openNodes.length > 0 &&
+			solutionPath === null
+		) {
+			solutionPath = this.doIteration();
+			aux++;
+		}
+		return solutionPath ?? [];
+	}
+
 	private doIteration(): Array<TreeEdge> | null {
 		const currentNode = this.getCurrentNode(true);
 		if (currentNode === null) return null;
@@ -72,19 +68,5 @@ export default abstract class ListsSearch {
 			}
 			return null;
 		}
-	}
-
-	public search(maxIterations: number = Infinity): Array<TreeEdge> {
-		let solutionPath = null;
-		let aux = 0;
-		while (
-			aux < maxIterations &&
-			this.openNodes.length > 0 &&
-			solutionPath === null
-		) {
-			solutionPath = this.doIteration();
-			aux++;
-		}
-		return solutionPath ?? [];
 	}
 }

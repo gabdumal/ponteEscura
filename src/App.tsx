@@ -67,12 +67,18 @@ export default function App() {
 			break;
 		case Option.BreadthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure searchAlgorithm={new BreadthFirstSearch()} />
+				<ListsSearchProcedure
+					searchAlgorithm={new BreadthFirstSearch()}
+					searchAlgorithmSafeName={BreadthFirstSearch.getSafeAlgorithmName()}
+				/>
 			);
 			break;
 		case Option.DepthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure searchAlgorithm={new DepthFirstSearch()} />
+				<ListsSearchProcedure
+					searchAlgorithm={new DepthFirstSearch()}
+					searchAlgorithmSafeName={DepthFirstSearch.getSafeAlgorithmName()}
+				/>
 			);
 			break;
 		default:

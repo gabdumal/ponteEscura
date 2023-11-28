@@ -4,33 +4,26 @@ import Problem from '../Problem.js';
 import Tree from '../Tree/Tree.js';
 import Rule from '../Rule.js';
 import State from '../State.js';
+import Search from './Search.js';
 
-export default class BacktrackingSearch {
+export default class BacktrackingSearch extends Search {
 	/// Attributes
-	private static algorithmName = 'Backtracking Search';
-	private tree: Tree;
 	private sortingFunction: (a: Rule, b: Rule) => number;
 
 	/// Constructor
 	constructor(sortingFunction: (a: Rule, b: Rule) => number) {
+		super();
 		const state = new State();
 		this.tree = new Tree(state);
 		this.sortingFunction = sortingFunction;
 	}
 
-	/// Methods
-	public getTree(): Tree {
-		return this.tree;
-	}
-
+	/// Getters
 	public static getAlgorithmName(): string {
-		return this.algorithmName;
+		return 'Backtracking Search';
 	}
 
-	public static getSafeAlgorithmName(): string {
-		return this.algorithmName.replace(/ /g, '_');
-	}
-
+	/// Methods
 	public search(maxIterations: number = Infinity): Array<TreeEdge> {
 		let solutionPath = null;
 		let aux = 0;

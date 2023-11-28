@@ -3,9 +3,6 @@ import TreeEdge from '../Tree/TreeEdge.js';
 import TreeNode from '../Tree/TreeNode.js';
 
 export default class BreadthFirstSearch extends ListsSearch {
-	/// Attributes
-	protected algorithmName = 'Breadth First Search';
-
 	/// Constructor
 	constructor() {
 		const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
@@ -15,6 +12,11 @@ export default class BreadthFirstSearch extends ListsSearch {
 			);
 		};
 		super(sortingFunction);
+	}
+
+	/// Getters
+	public static getAlgorithmName(): string {
+		return 'Breadth First Search';
 	}
 
 	/// Methods

@@ -6,29 +6,13 @@
     ' left to right direction
 
 
-    ' Definições
-
-    enum Item {
-        Lamp = 0
-	    Athlete = 1
-	    Boy = 3
-	    Lord = 6
-	    Woman = 8
-	    Lady = 12
-    }
-
-    enum RiverBank {
-        Initial
-        Final
-    }
-
-    struct Outcome {
-        isTerminal: boolean
-        win: boolean
-    }
-
-
     ' Pacotes
+
+    package Definitions <<Rectangle>> {
+        enum Item
+        enum RiverBank
+        struct Outcome
+    }
 
     package Domain <<Rectangle>> {
         class Rule
@@ -49,7 +33,33 @@
     }
 
     package Searches <<Rectangle>> {
+        abstract class Search
+        abstract class ListsSearch
+        class BreadthFirstSearch
+        class DepthFirstSearch
         class BacktrackingSearch
+    }
+
+
+    ' Definições
+
+    enum Item {
+        Lamp = 0
+	    Athlete = 1
+	    Boy = 3
+	    Lord = 6
+	    Woman = 8
+	    Lady = 12
+    }
+
+    enum RiverBank {
+        Initial
+        Final
+    }
+
+    struct Outcome {
+        isTerminal: boolean
+        win: boolean
     }
 
 
@@ -114,10 +124,28 @@
         +{static}getAscendingPath(node: TreeNode): TreeEdge[]
     }
 
+    abstract class Search {
+        #tree: Tree
+        +getTree(): Tree
+        +{static}getAlgorithmName(): string
+        +{static}getSafeAlgorithmName(): string
+        +{abstract}search(maxIterations?: number): TreeEdge[]
+    }
+
     class BacktrackingSearch {
-        {static}-algorithmName: string
-        -tree: Tree
-        -sortingFunction: Function
+        {field}-sortingFunction: (Rule, Rule) => number
+        -doBacktracking(startNode: TreeNode): \n{foundNode: TreeNode, isSolution: boolean}
+    }
+
+    abstract class ListsSearch {
+        #currentNode: TreeNode
+        #openNodes: TreeNode[]
+        #closedNodes: TreeNode[]
+        {field}-sortingFunction: (TreeEdge, TreeEdge) => number
+        {abstract}+getCurrentNode(): TreeNode
+        +getOpenNodes(): TreeNode[]
+        +getClosedNodes(): TreeNode[]
+        -doIteration(): TreeEdge[] | null
     }
 
 
@@ -129,17 +157,18 @@
     BasicNode "1" --> "1" State : Has State
     TreeNode "1" --> "0..1" TreeEdge : Has source
     Tree "1" --> "1" TreeNode : Has root
+    Tree "1" <-- "1" Search : Has tree
     TreeEdge --|> BasicEdge
     TreeNode --|> BasicNode
     Tree --|> BasicStructure
+    ListsSearch --|> Search
+    BacktrackingSearch --|> Search
+    BreadthFirstSearch --|> ListsSearch
+    DepthFirstSearch --|> ListsSearch
 
-    Structure -[hidden]down-> RiverBank
-    RiverBank -[hidden]right-> Item
-    Item -[hidden]right-> Outcome
-
-    ' Funcionario -[hidden]-> Falha
-    ' Cargo -right[hidden]-> Status
-    ' Status -right[hidden]-> TipoAD
+    Item -[hidden]left- RiverBank
+    RiverBank -[hidden]left- Outcome
+    ListsSearch --[hidden]down-> Item
 
 
 @enduml
