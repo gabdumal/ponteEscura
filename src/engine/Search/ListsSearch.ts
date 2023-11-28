@@ -15,10 +15,10 @@ import TreeNode from '../Tree/TreeNode.ts';
 export default abstract class ListsSearch {
 	/// Attributes
 	protected abstract algorithmName: string;
-	private tree: Tree;
+	public tree: Tree;
 	protected currentNode: TreeNode | null;
-	private openNodes: Array<TreeNode>;
-	private closedNodes: Array<TreeNode>;
+	public openNodes: Array<TreeNode>;
+	public closedNodes: Array<TreeNode>;
 	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor

@@ -6,6 +6,7 @@ import DynamicTreeGame from './interface/DynamicTreeGame.tsx';
 import ListsSearchProcedure from './interface/ListsSearchProcedure.tsx';
 import DepthFirstSearch from './engine/Search/DepthFirstSearch.ts';
 import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.ts';
+import BacktrackingSearch from './engine/Search/BacktrackingSearch.ts';
 
 enum Option {
 	CommonGame,
@@ -60,6 +61,11 @@ export default function App() {
 			break;
 		case Option.DynamicTreeGame:
 			interfaceComponent = <DynamicTreeGame />;
+			break;
+		case Option.Backtracking:
+			interfaceComponent = (
+				<ListsSearchProcedure searchAlgorithm={new BacktrackingSearch()} />
+			);
 			break;
 		case Option.BreadthFirstSearch:
 			interfaceComponent = (
