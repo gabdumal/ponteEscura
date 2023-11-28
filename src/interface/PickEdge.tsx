@@ -1,6 +1,6 @@
 import React from 'react';
 import SelectInput from 'ink-select-input';
-import BasicEdge from '../engine/Basic/BasicEdge.ts';
+import BasicEdge from '../engine/Basic/BasicEdge.js';
 
 interface PickEdgeProps {
 	targetEdges: Array<BasicEdge>;

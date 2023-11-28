@@ -6,10 +6,11 @@ import {
 	toDot,
 	GraphAttributesObject,
 } from 'ts-graphviz';
-import BasicStructure from '../Basic/BasicStructure.ts';
-import TreeNode from './TreeNode.ts';
-import TreeEdge from './TreeEdge.ts';
+import BasicStructure from '../Basic/BasicStructure.js';
+import TreeNode from './TreeNode.js';
+import TreeEdge from './TreeEdge.js';
 import State from '../State.js';
+import Rule from '../Rule.js';
 
 export default class Tree extends BasicStructure {
 	/// Attributes
@@ -37,6 +38,7 @@ export default class Tree extends BasicStructure {
 		const validRules = node.getState().getValidRules();
 		const edges = [];
 		for (const rule of validRules) {
+			if (node.checkIfTransitionAlreadyExists(rule)) continue;
 			const newState = rule.transpose(node.getState());
 			if (!node.checkIfThereIsLoop(newState)) {
 				const newNode = this.createNode(newState);
@@ -45,6 +47,26 @@ export default class Tree extends BasicStructure {
 			}
 		}
 		return edges;
+	}
+
+	public createNextValidTransition(
+		node: TreeNode,
+		sortingFunction: (a: Rule, b: Rule) => number,
+	): TreeEdge | null {
+		const outcome = node.getState().getOutcome();
+		if (outcome.isTerminal) return null;
+		const validRules = node.getState().getValidRules();
+		validRules.sort(sortingFunction);
+		for (const rule of validRules) {
+			if (node.checkIfTransitionAlreadyExists(rule)) continue;
+			const newState = rule.transpose(node.getState());
+			if (!node.checkIfThereIsLoop(newState)) {
+				const newNode = this.createNode(newState);
+				const edge = node.addEdge(newNode, rule);
+				return edge;
+			}
+		}
+		return null;
 	}
 
 	public exportToDot({

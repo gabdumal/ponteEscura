@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
 import Scenery from './Scenery.js';
 import State from '../engine/State.js';
-import Tree from '../engine/Tree/Tree.ts';
-import TreeNode from '../engine/Tree/TreeNode.ts';
-import TreeEdge from '../engine/Tree/TreeEdge.ts';
-import PickEdge from './PickEdge.tsx';
+import Tree from '../engine/Tree/Tree.js';
+import TreeNode from '../engine/Tree/TreeNode.js';
+import TreeEdge from '../engine/Tree/TreeEdge.js';
+import PickEdge from './PickEdge.jsx';
 
 export default function DynamicTreeGame() {
 	const [tree, setTree] = React.useState<Tree>();

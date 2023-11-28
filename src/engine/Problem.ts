@@ -1,5 +1,5 @@
-import Rule from './Rule.ts';
-import State from './State.ts';
+import Rule from './Rule.js';
+import State from './State.js';
 
 export enum Item {
 	Lamp = 0,

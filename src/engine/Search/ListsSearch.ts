@@ -6,11 +6,11 @@ import {
 	toDot,
 	GraphAttributesObject,
 } from 'ts-graphviz';
-import Problem from '../Problem.ts';
-import State from '../State.ts';
-import Tree from '../Tree/Tree.ts';
-import TreeEdge from '../Tree/TreeEdge.ts';
-import TreeNode from '../Tree/TreeNode.ts';
+import Problem from '../Problem.js';
+import State from '../State.js';
+import Tree from '../Tree/Tree.js';
+import TreeEdge from '../Tree/TreeEdge.js';
+import TreeNode from '../Tree/TreeNode.js';
 
 export default abstract class ListsSearch {
 	/// Attributes

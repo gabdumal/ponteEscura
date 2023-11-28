@@ -1,6 +1,6 @@
-import BasicNode from '../Basic/BasicNode.ts';
-import GraphEdge from './GraphEdge.ts';
-import Rule from '../Rule.ts';
+import BasicNode from '../Basic/BasicNode.js';
+import GraphEdge from './GraphEdge.js';
+import Rule from '../Rule.js';
 import State from '../State.js';
 
 export default class GraphNode extends BasicNode {

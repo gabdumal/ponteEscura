@@ -1,12 +1,12 @@
 import React from 'react';
 import {Box, Text} from 'ink';
-import CommonGame from './interface/CommonGame.tsx';
+import CommonGame from './interface/CommonGame.jsx';
 import SelectInput from 'ink-select-input';
-import DynamicTreeGame from './interface/DynamicTreeGame.tsx';
-import ListsSearchProcedure from './interface/ListsSearchProcedure.tsx';
-import DepthFirstSearch from './engine/Search/DepthFirstSearch.ts';
-import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.ts';
-import BacktrackingSearch from './engine/Search/BacktrackingSearch.ts';
+import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
+import ListsSearchProcedure from './interface/ListsSearchProcedure.jsx';
+import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
+import DepthFirstSearch from './engine/Search/DepthFirstSearch.js';
+import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.js';
 
 enum Option {
 	CommonGame,
@@ -63,9 +63,7 @@ export default function App() {
 			interfaceComponent = <DynamicTreeGame />;
 			break;
 		case Option.Backtracking:
-			interfaceComponent = (
-				<ListsSearchProcedure searchAlgorithm={new BacktrackingSearch()} />
-			);
+			interfaceComponent = <BacktrackingSearchProcedure />;
 			break;
 		case Option.BreadthFirstSearch:
 			interfaceComponent = (

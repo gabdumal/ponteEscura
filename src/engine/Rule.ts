@@ -1,5 +1,5 @@
-import Problem, {Item} from './Problem.ts';
-import State, {RiverBank} from './State.ts';
+import Problem, {Item} from './Problem.js';
+import State, {RiverBank} from './State.js';
 
 export default class Rule {
 	/// Attributes

@@ -1,5 +1,5 @@
 import BasicNode from '../Basic/BasicNode.js';
-import TreeEdge from './TreeEdge.ts';
+import TreeEdge from './TreeEdge.js';
 import Rule from '../Rule.js';
 import State from '../State.js';
 
@@ -38,5 +38,13 @@ export default class TreeNode extends BasicNode {
 				return sourceNode.checkIfThereIsLoop(state);
 			}
 		}
+	}
+
+	public checkIfTransitionAlreadyExists(rule: Rule): boolean {
+		const targetEdges = this.getTargetEdges();
+		for (const targetEdge of targetEdges) {
+			if (targetEdge.getRule() === rule) return true;
+		}
+		return false;
 	}
 }

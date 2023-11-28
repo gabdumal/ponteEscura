@@ -1,3 +1,3 @@
-import BasicEdge from '../Basic/BasicEdge.ts';
+import BasicEdge from '../Basic/BasicEdge.js';
 
 export default class GraphEdge extends BasicEdge {}

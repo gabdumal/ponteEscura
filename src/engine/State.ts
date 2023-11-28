@@ -1,6 +1,6 @@
-import {Outcome} from '../types.ts';
-import Problem, {Item} from './Problem.ts';
-import Rule from './Rule.ts';
+import {Outcome} from '../types.js';
+import Problem, {Item} from './Problem.js';
+import Rule from './Rule.js';
 
 export enum RiverBank {
 	Initial,

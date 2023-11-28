@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
 import Tree from '../engine/Tree/Tree.js';
 import TreeNode from '../engine/Tree/TreeNode.js';
-import ListsSearch from '../engine/Search/ListsSearch.ts';
+import ListsSearch from '../engine/Search/ListsSearch.js';
 
 interface ListsSearchProcedureProps {
 	searchAlgorithm: ListsSearch;

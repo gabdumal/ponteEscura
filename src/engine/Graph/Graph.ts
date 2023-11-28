@@ -6,9 +6,9 @@ import {
 	toDot,
 	GraphAttributesObject,
 } from 'ts-graphviz';
-import BasicStructure from '../Basic/BasicStructure.ts';
-import GraphNode from './GraphNode.ts';
-import GraphEdge from './GraphEdge.ts';
+import BasicStructure from '../Basic/BasicStructure.js';
+import GraphNode from './GraphNode.js';
+import GraphEdge from './GraphEdge.js';
 import State from '../State.js';
 
 export default class Graph extends BasicStructure {

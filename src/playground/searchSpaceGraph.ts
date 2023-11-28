@@ -1,5 +1,5 @@
-import Graph from '../engine/Graph/Graph.ts';
-import State from '../engine/State.ts';
+import Graph from '../engine/Graph/Graph.js';
+import State from '../engine/State.js';
 
 const searchSpace = new Graph();
 let node = searchSpace.addNode(new State());

@@ -46,7 +46,10 @@
             class TreeNode
             class Tree
         }
+    }
 
+    package Searches <<Rectangle>> {
+        class BacktrackingSearch
     }
 
 
@@ -107,7 +110,14 @@
 
     class Tree {
         -rootNode: TreeNode
+        +createNextValidTransition(node: TreeNode, \nsortingFunction: Function): TreeEdge | null
         +{static}getAscendingPath(node: TreeNode): TreeEdge[]
+    }
+
+    class BacktrackingSearch {
+        {static}-algorithmName: string
+        -tree: Tree
+        -sortingFunction: Function
     }
 
 
