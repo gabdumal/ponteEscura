@@ -4,6 +4,7 @@ import CommonGame from './interface/CommonGame.jsx';
 import SelectInput from 'ink-select-input';
 import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
 import ListsSearchProcedure from './interface/ListsSearchProcedure.jsx';
+import WeightedListsSearchProcedure from './interface/WeightedListsSearchProcedure.jsx';
 import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
 
 export enum Option {
@@ -12,6 +13,7 @@ export enum Option {
 	Backtracking,
 	BreadthFirstSearch,
 	DepthFirstSearch,
+	OrderedSearch,
 }
 
 export default function App() {
@@ -36,6 +38,10 @@ export default function App() {
 		{
 			label: 'Busca em profundidade',
 			value: Option.DepthFirstSearch,
+		},
+		{
+			label: 'Busca ordenada',
+			value: Option.OrderedSearch,
 		},
 	];
 
@@ -71,6 +77,11 @@ export default function App() {
 		case Option.DepthFirstSearch:
 			interfaceComponent = (
 				<ListsSearchProcedure searchAlgorithm={Option.DepthFirstSearch} />
+			);
+			break;
+		case Option.OrderedSearch:
+			interfaceComponent = (
+				<WeightedListsSearchProcedure searchAlgorithm={Option.OrderedSearch} />
 			);
 			break;
 		default:

@@ -4,17 +4,25 @@ import Tree from '../Tree/Tree.js';
 import TreeEdge from '../Tree/TreeEdge.js';
 import TreeNode from '../Tree/TreeNode.js';
 import Search from './Search.js';
+import State from '../State.js';
 
 export default abstract class ListsSearch extends Search {
 	/// Attributes
 	protected currentNode: TreeNode | null;
 	protected openNodes: Array<TreeNode>;
 	protected closedNodes: Array<TreeNode>;
-	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
+	protected sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor
-	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
-		super();
+	constructor(
+		sortingFunction: (a: TreeEdge, b: TreeEdge) => number,
+		tree?: Tree,
+	) {
+		if (!tree) {
+			const state = new State();
+			tree = new Tree(state);
+		}
+		super(tree);
 		this.currentNode = null;
 		this.openNodes = [this.tree.getRoot()];
 		this.closedNodes = [];
@@ -60,7 +68,10 @@ export default abstract class ListsSearch extends Search {
 			return solutionPath;
 		} else {
 			this.closedNodes.push(currentNode);
-			const validTransitions = this.tree.createValidTransitions(currentNode, this.sortingFunction);
+			const validTransitions = this.tree.createValidTransitions(
+				currentNode,
+				this.sortingFunction,
+			);
 			for (const transition of validTransitions) {
 				const targetNode = transition.getTargetNode() as TreeNode;
 				this.openNodes.push(targetNode);

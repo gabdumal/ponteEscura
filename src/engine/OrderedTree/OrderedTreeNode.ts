@@ -1,4 +1,4 @@
-import WeightedTreeNode from './WeightedTreeNode.ts';
+import WeightedTreeNode from '../WeightedTree/WeightedTreeNode.js';
 
 export default class OrderedTreeNode extends WeightedTreeNode {
 	/// Getters

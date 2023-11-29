@@ -14,7 +14,7 @@ import Rule from '../Rule.js';
 
 export default class Tree extends BasicStructure {
 	/// Attributes
-	private root: TreeNode;
+	protected root: TreeNode;
 
 	/// Constructor
 	constructor(state: State) {

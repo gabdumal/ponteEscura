@@ -3,11 +3,11 @@ import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
 import Tree from '../engine/Tree/Tree.js';
 import TreeNode from '../engine/Tree/TreeNode.js';
-import TreeEdge from '../engine/Tree/TreeEdge.ts';
-import {Option} from '../App.tsx';
-import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.ts';
-import DepthFirstSearch from '../engine/Search/DepthFirstSearch.ts';
-import ListsSearch from '../engine/Search/ListsSearch.ts';
+import TreeEdge from '../engine/Tree/TreeEdge.js';
+import {Option} from '../App.jsx';
+import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.js';
+import DepthFirstSearch from '../engine/Search/DepthFirstSearch.js';
+import ListsSearch from '../engine/Search/ListsSearch.js';
 
 interface ListsSearchProcedureProps {
 	searchAlgorithm: Option.BreadthFirstSearch | Option.DepthFirstSearch;

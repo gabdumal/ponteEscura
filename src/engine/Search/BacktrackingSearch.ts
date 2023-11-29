@@ -12,9 +12,9 @@ export default class BacktrackingSearch extends Search {
 
 	/// Constructor
 	constructor(sortingFunction: (a: Rule, b: Rule) => number) {
-		super();
 		const state = new State();
-		this.tree = new Tree(state);
+		const tree = new Tree(state);
+		super(tree);
 		this.sortingFunction = sortingFunction;
 	}
 

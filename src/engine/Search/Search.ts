@@ -1,4 +1,3 @@
-import State from '../State.js';
 import Tree from '../Tree/Tree.js';
 import TreeEdge from '../Tree/TreeEdge.js';
 
@@ -6,9 +5,8 @@ export default abstract class Search {
 	/// Attributes
 	protected tree: Tree;
 
-	constructor() {
-		const state = new State();
-		this.tree = new Tree(state);
+	constructor(tree: Tree) {
+		this.tree = tree;
 	}
 
 	/// Getters

@@ -5,7 +5,7 @@ import State from '../State.js';
 
 export default class TreeNode extends BasicNode {
 	/// Attributes
-	private sourceEdge: TreeEdge | null;
+	protected sourceEdge: TreeEdge | null;
 
 	/// Constructor
 	constructor(id: number, state: State, sourceEdge?: TreeEdge) {

@@ -6,7 +6,7 @@ export default abstract class BasicNode {
 	/// Attributes
 	private id: number;
 	private state: State;
-	private targetEdges: Array<BasicEdge>;
+	protected targetEdges: Array<BasicEdge>;
 
 	/// Constructor
 	constructor(id: number, state: State) {
@@ -39,7 +39,7 @@ export default abstract class BasicNode {
 		rule: Rule,
 	): BasicEdge | null;
 
-	private addTargetEdge(
+	protected addTargetEdge(
 		targetNode: BasicNode,
 		rule: Rule,
 		connect: boolean,
