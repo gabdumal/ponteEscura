@@ -29,15 +29,21 @@ export default abstract class BasicStructure {
 		return node;
 	}
 
-	public abstract createValidTransitions(node: BasicNode): Array<BasicEdge>;
+	public abstract createValidTransitions(
+		node: BasicNode,
+		sortingFunction: (a: BasicEdge, b: BasicEdge) => number,
+	): Array<BasicEdge>;
 
 	public createAllValidTransitions(node: BasicNode): void {
-		let edges = this.createValidTransitions(node);
+		const sortingFunction = (a: BasicEdge, b: BasicEdge) => {
+			return a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
+		};
+		let edges = this.createValidTransitions(node, sortingFunction);
 		while (edges.length > 0) {
 			const edge = edges.shift();
 			if (edge === undefined) continue;
 			node = edge.getTargetNode();
-			const createdEdges = this.createValidTransitions(node);
+			const createdEdges = this.createValidTransitions(node, sortingFunction);
 			for (const createdEdge of createdEdges) {
 				if (!createdEdge.getTargetNode().getState().getOutcome().isTerminal)
 					edges.push(createdEdge);

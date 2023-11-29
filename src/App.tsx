@@ -5,10 +5,8 @@ import SelectInput from 'ink-select-input';
 import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
 import ListsSearchProcedure from './interface/ListsSearchProcedure.jsx';
 import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
-import DepthFirstSearch from './engine/Search/DepthFirstSearch.js';
-import BreadthFirstSearch from './engine/Search/BreadthFirstSearch.js';
 
-enum Option {
+export enum Option {
 	CommonGame,
 	DynamicTreeGame,
 	Backtracking,
@@ -67,18 +65,12 @@ export default function App() {
 			break;
 		case Option.BreadthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure
-					searchAlgorithm={new BreadthFirstSearch()}
-					searchAlgorithmSafeName={BreadthFirstSearch.getSafeAlgorithmName()}
-				/>
+				<ListsSearchProcedure searchAlgorithm={Option.BreadthFirstSearch} />
 			);
 			break;
 		case Option.DepthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure
-					searchAlgorithm={new DepthFirstSearch()}
-					searchAlgorithmSafeName={DepthFirstSearch.getSafeAlgorithmName()}
-				/>
+				<ListsSearchProcedure searchAlgorithm={Option.DepthFirstSearch} />
 			);
 			break;
 		default:

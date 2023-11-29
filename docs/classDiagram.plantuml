@@ -99,8 +99,9 @@
         -state: State
         -targetEdges: BasicEdge[]
         #{abstract}addSourceEdge(sourceNode: BasicNode, rule: Rule): BasicEdge | null
-        -addTargetEdge(targetNode: BasicNode, rule: Rule): BasicEdge
-        +addEdge(targetNode: BasicNode, rule: Rule): BasicEdge
+        -addTargetEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
+        +addEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
+        +connectTargetEdges(targetEdges: BasicEdge[]): void
         +{abstract}checkIfThereIsLoop(state: State): boolean
     }
 
@@ -108,7 +109,7 @@
         -nextNodeId: number
         #{abstract}instantiateNode(id: number, state: State): BasicNode
         #createNode(state: State): BasicNode
-        +{abstract}createValidTransitions(node: BasicNode): BasicEdge[]
+        +{abstract}createValidTransitions(node: BasicNode, sortingFunction: Function): BasicEdge[]
         +{abstract}exportToDot(): string
     }
 

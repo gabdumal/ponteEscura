@@ -39,19 +39,31 @@ export default abstract class BasicNode {
 		rule: Rule,
 	): BasicEdge | null;
 
-	private addTargetEdge(targetNode: BasicNode, rule: Rule): BasicEdge {
+	private addTargetEdge(
+		targetNode: BasicNode,
+		rule: Rule,
+		connect: boolean,
+	): BasicEdge {
 		const edge = new BasicEdge(this, targetNode, rule);
-		this.targetEdges.push(edge);
+		if (connect) this.targetEdges.push(edge);
 		return edge;
 	}
 
-	public addEdge(targetNode: BasicNode, rule: Rule): BasicEdge {
+	public addEdge(
+		targetNode: BasicNode,
+		rule: Rule,
+		connect: boolean = true,
+	): BasicEdge {
 		const sourceEdge = targetNode.addSourceEdge(this, rule);
 		if (sourceEdge === null) throw new Error('Cannot add edge');
 		else {
-			const targetEdge = this.addTargetEdge(targetNode, rule);
+			const targetEdge = this.addTargetEdge(targetNode, rule, connect);
 			return targetEdge;
 		}
+	}
+
+	public connectTargetEdges(targetEdges: Array<BasicEdge>): void {
+		this.targetEdges = this.targetEdges.concat(targetEdges);
 	}
 
 	public abstract checkIfThereIsLoop(state: State): boolean;

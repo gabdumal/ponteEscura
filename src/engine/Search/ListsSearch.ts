@@ -60,8 +60,7 @@ export default abstract class ListsSearch extends Search {
 			return solutionPath;
 		} else {
 			this.closedNodes.push(currentNode);
-			const validTransitions = this.tree.createValidTransitions(currentNode);
-			validTransitions.sort(this.sortingFunction);
+			const validTransitions = this.tree.createValidTransitions(currentNode, this.sortingFunction);
 			for (const transition of validTransitions) {
 				const targetNode = transition.getTargetNode() as TreeNode;
 				this.openNodes.push(targetNode);

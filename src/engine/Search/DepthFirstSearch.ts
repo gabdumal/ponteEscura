@@ -4,13 +4,7 @@ import TreeNode from '../Tree/TreeNode.js';
 
 export default class DepthFirstSearch extends ListsSearch {
 	/// Constructor
-	constructor() {
-		const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
-			return (
-				b.getTargetNode().getState().getRemainingTime() -
-				a.getTargetNode().getState().getRemainingTime()
-			);
-		};
+	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
 		super(sortingFunction);
 	}
 

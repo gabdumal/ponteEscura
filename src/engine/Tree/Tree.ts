@@ -32,21 +32,26 @@ export default class Tree extends BasicStructure {
 		return new TreeNode(id, state);
 	}
 
-	public createValidTransitions(node: TreeNode): Array<TreeEdge> {
+	public createValidTransitions(
+		node: TreeNode,
+		sortingFunction: (a: TreeEdge, b: TreeEdge) => number,
+	): Array<TreeEdge> {
 		const outcome = node.getState().getOutcome();
 		if (outcome.isTerminal) return [];
 		const validRules = node.getState().getValidRules();
-		const edges = [];
+		const targetEdges = [];
 		for (const rule of validRules) {
 			if (node.checkIfTransitionAlreadyExists(rule)) continue;
 			const newState = rule.transpose(node.getState());
 			if (!node.checkIfThereIsLoop(newState)) {
 				const newNode = this.createNode(newState);
-				const edge = node.addEdge(newNode, rule);
-				edges.push(edge);
+				const targetEdge = node.addEdge(newNode, rule, false);
+				targetEdges.push(targetEdge);
 			}
 		}
-		return edges;
+		targetEdges.sort(sortingFunction);
+		node.connectTargetEdges(targetEdges);
+		return targetEdges;
 	}
 
 	public createNextValidTransition(
