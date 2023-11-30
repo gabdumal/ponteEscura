@@ -1,6 +1,6 @@
 import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.js';
-import Tree from '../engine/Tree/Tree.js';
-import TreeNode from '../engine/Tree/TreeNode.js';
+import Tree from '../engine/Structure/Tree/Tree.js';
+import TreeNode from '../engine/Structure/Tree/TreeNode.js';
 
 const breadthFirstSearch = new BreadthFirstSearch();
 const solutionPath = breadthFirstSearch.search();

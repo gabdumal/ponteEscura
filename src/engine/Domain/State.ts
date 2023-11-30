@@ -1,4 +1,4 @@
-import {Outcome} from '../types.js';
+import {Outcome} from '../../types.js';
 import Problem, {Item} from './Problem.js';
 import Rule from './Rule.js';
 

@@ -1,10 +1,10 @@
 import {attribute as _} from 'ts-graphviz';
-import Problem from '../Problem.js';
-import Tree from '../Tree/Tree.js';
-import TreeEdge from '../Tree/TreeEdge.js';
-import TreeNode from '../Tree/TreeNode.js';
+import Problem from '../Domain/Problem.js';
+import Tree from '../Structure/Tree/Tree.js';
+import TreeEdge from '../Structure/Tree/TreeEdge.js';
+import TreeNode from '../Structure/Tree/TreeNode.js';
 import Search from './Search.js';
-import State from '../State.js';
+import State from '../Domain/State.js';
 
 export default abstract class ListsSearch extends Search {
 	/// Attributes
@@ -14,14 +14,9 @@ export default abstract class ListsSearch extends Search {
 	protected sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor
-	constructor(
-		sortingFunction: (a: TreeEdge, b: TreeEdge) => number,
-		tree?: Tree,
-	) {
-		if (!tree) {
-			const state = new State();
-			tree = new Tree(state);
-		}
+	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
+		const state = new State();
+		const tree = new Tree(state);
 		super(tree);
 		this.currentNode = null;
 		this.openNodes = [this.tree.getRoot()];

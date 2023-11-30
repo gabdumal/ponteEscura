@@ -2,7 +2,7 @@ import {attribute as _, GraphAttributesObject} from 'ts-graphviz';
 import {Format, toFile} from 'ts-graphviz/adapter';
 import BasicNode from './BasicNode.js';
 import BasicEdge from './BasicEdge.js';
-import State from '../State.js';
+import State from '../../Domain/State.js';
 
 export default abstract class BasicStructure {
 	/// Attributes

@@ -1,9 +1,9 @@
 import React from 'react';
 import {Box, Text} from 'ink';
 import Scenery from './Scenery.js';
-import State from '../engine/State.js';
 import PickRule from './PickRule.js';
-import Rule from '../engine/Rule.js';
+import State from '../engine/Domain/State.js';
+import Rule from '../engine/Domain/Rule.js';
 
 export default function CommonGame() {
 	const [state, setState] = React.useState<State>(new State());

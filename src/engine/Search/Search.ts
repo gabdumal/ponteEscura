@@ -1,5 +1,5 @@
-import Tree from '../Tree/Tree.js';
-import TreeEdge from '../Tree/TreeEdge.js';
+import Tree from '../Structure/Tree/Tree.js';
+import TreeEdge from '../Structure/Tree/TreeEdge.js';
 
 export default abstract class Search {
 	/// Attributes

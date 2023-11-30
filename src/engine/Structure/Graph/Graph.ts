@@ -9,7 +9,7 @@ import {
 import BasicStructure from '../Basic/BasicStructure.js';
 import GraphNode from './GraphNode.js';
 import GraphEdge from './GraphEdge.js';
-import State from '../State.js';
+import State from '../../Domain/State.js';
 
 export default class Graph extends BasicStructure {
 	/// Attributes

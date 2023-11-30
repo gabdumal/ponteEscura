@@ -1,6 +1,6 @@
 import ListsSearch from './ListsSearch.js';
-import TreeEdge from '../Tree/TreeEdge.js';
-import TreeNode from '../Tree/TreeNode.js';
+import TreeEdge from '../Structure/Tree/TreeEdge.js';
+import TreeNode from '../Structure/Tree/TreeNode.js';
 
 export default class BreadthFirstSearch extends ListsSearch {
 	/// Constructor

@@ -4,7 +4,7 @@ import CommonGame from './interface/CommonGame.jsx';
 import SelectInput from 'ink-select-input';
 import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
 import ListsSearchProcedure from './interface/ListsSearchProcedure.jsx';
-import WeightedListsSearchProcedure from './interface/WeightedListsSearchProcedure.jsx';
+import WeightedListsSearchProcedure from './interface/InformedSearchProcedure.tsx';
 import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
 
 export enum Option {
@@ -24,7 +24,7 @@ export default function App() {
 			value: Option.CommonGame,
 		},
 		{
-			label: 'Árvore dinâmica',
+			label: 'Árvore Dinâmica',
 			value: Option.DynamicTreeGame,
 		},
 		{
@@ -32,15 +32,15 @@ export default function App() {
 			value: Option.Backtracking,
 		},
 		{
-			label: 'Busca em largura',
+			label: 'Busca em Largura',
 			value: Option.BreadthFirstSearch,
 		},
 		{
-			label: 'Busca em profundidade',
+			label: 'Busca em Profundidade',
 			value: Option.DepthFirstSearch,
 		},
 		{
-			label: 'Busca ordenada',
+			label: 'Busca Ordenada',
 			value: Option.OrderedSearch,
 		},
 	];

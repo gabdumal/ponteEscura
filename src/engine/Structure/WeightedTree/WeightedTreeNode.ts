@@ -1,5 +1,5 @@
-import Rule from '../Rule.js';
-import State from '../State.js';
+import Rule from '../../Domain/Rule.js';
+import State from '../../Domain/State.js';
 import TreeEdge from '../Tree/TreeEdge.js';
 import TreeNode from '../Tree/TreeNode.js';
 import WeightedTreeEdge from './WeightedTreeEdge.js';

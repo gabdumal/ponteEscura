@@ -1,6 +1,6 @@
 import BasicEdge from './BasicEdge.js';
-import Rule from '../Rule.js';
-import State from '../State.js';
+import Rule from '../../Domain/Rule.js';
+import State from '../../Domain/State.js';
 
 export default abstract class BasicNode {
 	/// Attributes

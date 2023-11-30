@@ -2,17 +2,19 @@ import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
 import {Option} from '../App.js';
+import OrderedTreeNode from '../engine/Structure/OrderedTree/OrderedTreeNode.js';
+import OrderedTree from '../engine/Structure/OrderedTree/OrderedTree.js';
+import InformedSearch from '../engine/Search/InformedSearch.js';
 import OrderedSearch from '../engine/Search/OrderedSearch.js';
-import ListsSearch from '../engine/Search/ListsSearch.js';
-import OrderedTree from '../engine/OrderedTree/OrderedTree.js';
-import OrderedTreeNode from '../engine/OrderedTree/OrderedTreeNode.js';
 
-interface ListsSearchProcedureProps {
+interface InformedSearchProcedureProps {
 	searchAlgorithm: Option.OrderedSearch;
 }
-export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
+export default function InformedSearchProcedure(
+	props: InformedSearchProcedureProps,
+) {
 	useEffect(() => {
-		let searchAlgorithm: ListsSearch;
+		let searchAlgorithm: InformedSearch;
 		let searchAlgorithmSafeName: string;
 		searchAlgorithm = new OrderedSearch();
 		searchAlgorithmSafeName = OrderedSearch.getSafeAlgorithmName();
@@ -36,14 +38,14 @@ export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
 			.exportToDot({solutionPathNodes});
 		OrderedTree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 
-		const dotOpenNodesString = OrderedTree.exportNodesListToDot(
-			searchAlgorithm.getOpenNodes() as Array<OrderedTreeNode>,
-		);
-		OrderedTree.exportToFile(
-			dotOpenNodesString,
-			`${directory}/openNodes`,
-			'svg',
-		);
+		// const dotOpenNodesString = OrderedTree.exportNodesListToDot(
+		// 	searchAlgorithm.getOpenNodes() as Array<OrderedTreeNode>,
+		// );
+		// OrderedTree.exportToFile(
+		// 	dotOpenNodesString,
+		// 	`${directory}/openNodes`,
+		// 	'svg',
+		// );
 
 		const dotClosedNodesString = OrderedTree.exportNodesListToDot(
 			searchAlgorithm.getClosedNodes() as Array<OrderedTreeNode>,
@@ -54,7 +56,7 @@ export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
 			'svg',
 		);
 
-		const currentNode = searchAlgorithm.getCurrentNode(false);
+		const currentNode = searchAlgorithm.getCurrentNode();
 		if (currentNode !== null) {
 			const dotCurrentNodeString = OrderedTree.exportNodesListToDot([
 				currentNode as OrderedTreeNode,

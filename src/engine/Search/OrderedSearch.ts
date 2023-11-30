@@ -1,15 +1,11 @@
-import TreeEdge from '../Tree/TreeEdge.js';
-import WeightedTreeEdge from '../WeightedTree/WeightedTreeEdge.js';
-import OrderedTreeNode from '../OrderedTree/OrderedTreeNode.js';
-import OrderedTree from '../OrderedTree/OrderedTree.js';
-import State from '../State.js';
-import ListsSearch from './ListsSearch.js';
-import TreeNode from '../Tree/TreeNode.js';
-import Problem from '../Problem.ts';
+import State, {RiverBank} from '../Domain/State.js';
+import OrderedTree from '../Structure/OrderedTree/OrderedTree.js';
+import OrderedTreeNode from '../Structure/OrderedTree/OrderedTreeNode.js';
+import TreeEdge from '../Structure/Tree/TreeEdge.js';
+import WeightedTreeEdge from '../Structure/WeightedTree/WeightedTreeEdge.js';
+import InformedSearch from './InformedSearch.js';
 
-export default class OrderedSearch extends ListsSearch {
-	/// Attributes
-
+export default class OrderedSearch extends InformedSearch {
 	/// Constructor
 	constructor() {
 		const sortingFunction = (
@@ -18,7 +14,14 @@ export default class OrderedSearch extends ListsSearch {
 		): number => {
 			const aTargetNode = a.getTargetNode() as OrderedTreeNode;
 			const bTargetNode = b.getTargetNode() as OrderedTreeNode;
-			return aTargetNode.getValue() - bTargetNode.getValue();
+			const delta = aTargetNode.getValue() - bTargetNode.getValue();
+			if (delta === 0) {
+				// If the values are equal, then the node with the most items on the final river bank is chosen
+				return (
+					bTargetNode.getState().getRiverBankItems(RiverBank.Final).length -
+					aTargetNode.getState().getRiverBankItems(RiverBank.Final).length
+				);
+			} else return delta;
 		};
 		const state = new State();
 		const tree = new OrderedTree(state);
@@ -29,35 +32,4 @@ export default class OrderedSearch extends ListsSearch {
 	public static getAlgorithmName(): string {
 		return 'Ordered Search';
 	}
-
-	/// Methods
-	public getCurrentNode(remove: boolean): TreeNode | null {
-		if (!remove) return this.currentNode as OrderedTreeNode;
-		const currentNode = this.getOpenNodes().shift();
-		if (currentNode === undefined) return null;
-		this.currentNode = currentNode;
-		return currentNode as OrderedTreeNode;
-	}
-
-	// private doIteration(): Array<WeightedTreeEdge> | null {
-	// 	const currentNode = this.getCurrentNode(true);
-	// 	if (currentNode === null) return null;
-
-	// 	if (Problem.isSolution(currentNode.getState())) {
-	// 		const solutionPath = OrderedTree.getAscendingPath(currentNode);
-	// 		return solutionPath as Array<WeightedTreeEdge>;
-	// 	} else {
-	// 		this.closedNodes.push(currentNode);
-	// 		const validTransitions = this.tree.createValidTransitions(
-	// 			currentNode,
-	// 			this.sortingFunction,
-	// 		);
-	// 		for (const transition of validTransitions) {
-	// 			const targetNode = transition.getTargetNode() as TreeNode;
-	// 			this.openNodes.push(targetNode);
-	// 		}
-	// 		this.openNodes.sort(this.sortingFunction);
-	// 		return null;
-	// 	}
-	// }
 }

@@ -1,10 +1,10 @@
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
-import Tree from '../engine/Tree/Tree.js';
-import TreeNode from '../engine/Tree/TreeNode.js';
+import Rule from '../engine/Domain/Rule.js';
+import Tree from '../engine/Structure/Tree/Tree.js';
+import TreeNode from '../engine/Structure/Tree/TreeNode.js';
 import BacktrackingSearch from '../engine/Search/BacktrackingSearch.js';
-import Rule from '../engine/Rule.js';
 
 export default function BacktrackingSearchProcedure() {
 	useEffect(() => {

@@ -1,4 +1,4 @@
-import Graph from '../engine/Graph/Graph.js';
+import Graph from '../engine/Structure/Graph/Graph.js';
 import State from '../engine/State.js';
 
 const searchSpace = new Graph();

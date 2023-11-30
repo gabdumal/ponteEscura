@@ -1,10 +1,10 @@
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
-import Tree from '../engine/Tree/Tree.js';
-import TreeNode from '../engine/Tree/TreeNode.js';
-import TreeEdge from '../engine/Tree/TreeEdge.js';
 import {Option} from '../App.jsx';
+import Tree from '../engine/Structure/Tree/Tree.js';
+import TreeNode from '../engine/Structure/Tree/TreeNode.js';
+import TreeEdge from '../engine/Structure/Tree/TreeEdge.js';
 import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.js';
 import DepthFirstSearch from '../engine/Search/DepthFirstSearch.js';
 import ListsSearch from '../engine/Search/ListsSearch.js';

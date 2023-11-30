@@ -6,8 +6,8 @@ import {
 	toDot,
 	GraphAttributesObject,
 } from 'ts-graphviz';
-import State from '../State.js';
-import OrderedTreeNode from './OrderedTreeNode.js';
+import State from '../../Domain/State.js';
+import OrderedTreeNode from './OrderedTreeNode.ts';
 import WeightedTree from '../WeightedTree/WeightedTree.js';
 import WeightedTreeEdge from '../WeightedTree/WeightedTreeEdge.ts';
 

@@ -9,8 +9,8 @@ import {
 import BasicStructure from '../Basic/BasicStructure.js';
 import TreeNode from './TreeNode.js';
 import TreeEdge from './TreeEdge.js';
-import State from '../State.js';
-import Rule from '../Rule.js';
+import State from '../../Domain/State.js';
+import Rule from '../../Domain/Rule.js';
 
 export default class Tree extends BasicStructure {
 	/// Attributes

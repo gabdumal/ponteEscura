@@ -1,4 +1,4 @@
-import Rule from '../Rule.js';
+import Rule from '../../Domain/Rule.js';
 import TreeEdge from '../Tree/TreeEdge.js';
 import WeightedTreeNode from './WeightedTreeNode.js';
 

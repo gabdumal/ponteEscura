@@ -1,7 +1,7 @@
 import BasicNode from '../Basic/BasicNode.js';
 import TreeEdge from './TreeEdge.js';
-import Rule from '../Rule.js';
-import State from '../State.js';
+import Rule from '../../Domain/Rule.js';
+import State from '../../Domain/State.js';
 
 export default class TreeNode extends BasicNode {
 	/// Attributes

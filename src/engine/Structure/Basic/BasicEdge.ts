@@ -1,5 +1,5 @@
 import BasicNode from './BasicNode.js';
-import Rule from '../Rule.js';
+import Rule from '../../Domain/Rule.js';
 
 export default class BasicEdge {
 	/// Attributes

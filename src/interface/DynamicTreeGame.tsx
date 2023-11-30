@@ -1,11 +1,12 @@
+import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
 import Scenery from './Scenery.js';
-import State from '../engine/State.js';
-import Tree from '../engine/Tree/Tree.js';
-import TreeNode from '../engine/Tree/TreeNode.js';
-import TreeEdge from '../engine/Tree/TreeEdge.js';
 import PickEdge from './PickEdge.jsx';
+import State from '../engine/Domain/State.js';
+import Tree from '../engine/Structure/Tree/Tree.js';
+import TreeNode from '../engine/Structure/Tree/TreeNode.js';
+import TreeEdge from '../engine/Structure/Tree/TreeEdge.js';
 
 export default function DynamicTreeGame() {
 	const [tree, setTree] = React.useState<Tree>();
@@ -13,12 +14,16 @@ export default function DynamicTreeGame() {
 	const [isTerminal, setIsTerminal] = React.useState<boolean>(false);
 	const [victory, setVictory] = React.useState<boolean>(false);
 
+	const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
+		return a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
+	};
+
 	useEffect(() => {
 		const state = new State();
 		const tree = new Tree(state);
 		const root = tree.getRoot();
 		const outcome = root.getState().getOutcome();
-		tree.createValidTransitions(root);
+		tree.createValidTransitions(root, sortingFunction);
 		setIsTerminal(outcome.isTerminal);
 		setVictory(outcome.win);
 		setTree(tree);
@@ -30,7 +35,8 @@ export default function DynamicTreeGame() {
 		const targetNode = edge.getTargetNode() as TreeNode;
 		const outcome = targetNode.getState().getOutcome();
 		setCurrentNode(targetNode);
-		if (outcome.isTerminal !== true) tree.createValidTransitions(targetNode);
+		if (outcome.isTerminal !== true)
+			tree.createValidTransitions(targetNode, sortingFunction);
 		if (
 			outcome.isTerminal === true ||
 			targetNode.getTargetEdges().length === 0
@@ -45,8 +51,12 @@ export default function DynamicTreeGame() {
 					solutionPathNodes.push(edge.getTargetNode() as TreeNode),
 				);
 			}
+
+			const directory = `images/Dynamic_Tree_Game`;
+			fs.mkdirSync(directory, {recursive: true});
+
 			const dot = tree.exportToDot({solutionPathNodes: solutionPathNodes});
-			Tree.exportToFile(dot, 'images/dynamicTreeGame', 'svg');
+			Tree.exportToFile(dot, `${directory}/Dynamic_Tree_Game`, 'svg');
 		}
 	}
 

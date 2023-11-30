@@ -1,9 +1,9 @@
-import TreeEdge from '../Tree/TreeEdge.js';
-import TreeNode from '../Tree/TreeNode.js';
-import Problem from '../Problem.js';
-import Tree from '../Tree/Tree.js';
-import Rule from '../Rule.js';
-import State from '../State.js';
+import TreeEdge from '../Structure/Tree/TreeEdge.js';
+import TreeNode from '../Structure/Tree/TreeNode.js';
+import Problem from '../Domain/Problem.js';
+import Tree from '../Structure/Tree/Tree.js';
+import Rule from '../Domain/Rule.js';
+import State from '../Domain/State.js';
 import Search from './Search.js';
 
 export default class BacktrackingSearch extends Search {
