@@ -46,11 +46,7 @@ export default class Graph extends BasicStructure {
 		return edges;
 	}
 
-	public exportToDot({
-		attributes,
-	}: {
-		attributes?: GraphAttributesObject;
-	}): string {
+	public toDot({attributes}: {attributes?: GraphAttributesObject}): string {
 		attributes = {
 			splines: 'true',
 			nodesep: 0.5,
@@ -65,7 +61,7 @@ export default class Graph extends BasicStructure {
 				[_.label]: `${node.getId().toString()}. ${node
 					.getState()
 					.getPlainTextScenery()}`,
-				[_.color]: Graph.getDotNodeColor(node),
+				[_.color]: node.getDotColor(),
 			});
 
 			dotGraph.addNode(dotNode);

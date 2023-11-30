@@ -1,3 +1,4 @@
+import {attribute as _, Node as GraphvizNode} from 'ts-graphviz';
 import BasicNode from '../Basic/BasicNode.js';
 import TreeEdge from './TreeEdge.js';
 import Rule from '../../Domain/Rule.js';
@@ -46,5 +47,13 @@ export default class TreeNode extends BasicNode {
 			if (targetEdge.getRule() === rule) return true;
 		}
 		return false;
+	}
+
+	public toDot(isInSolutionPath: boolean = false): GraphvizNode {
+		const dotNode = new GraphvizNode(this.getId().toString(), {
+			[_.label]: `${this.getId().toString()}. ${this.getState().getPlainTextScenery()}`,
+			[_.color]: isInSolutionPath ? 'orange' : this.getDotColor(),
+		});
+		return dotNode;
 	}
 }

@@ -5,5 +5,5 @@ const searchSpace = new Tree(new State());
 const root = searchSpace.getRoot();
 searchSpace.createAllValidTransitions(root);
 
-const dotString = searchSpace.exportToDot({});
+const dotString = searchSpace.toDot({});
 await Tree.exportToFile(dotString, 'images/searchSpace', 'svg');

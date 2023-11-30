@@ -32,7 +32,7 @@ export default function BacktrackingSearchProcedure() {
 
 		const dotTreeString = backtrackingSearch
 			.getTree()
-			.exportToDot({solutionPathNodes});
+			.toDot({solutionPathNodes});
 		Tree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 	}, []);
 

@@ -21,5 +21,5 @@ console.log(
 	breadthFirstSearch.getClosedNodes().map(node => node.getId()),
 );
 
-const dotString = breadthFirstSearch.getTree().exportToDot({solutionPathNodes});
+const dotString = breadthFirstSearch.getTree().toDot({solutionPathNodes});
 await Tree.exportToFile(dotString, 'images/breadthFirstSearch', 'svg');

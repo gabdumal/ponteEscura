@@ -6,12 +6,12 @@ import TreeNode from '../Structure/Tree/TreeNode.js';
 import Search from './Search.js';
 import State from '../Domain/State.js';
 
-export default abstract class ListsSearch extends Search {
+export default abstract class UninformedSearch extends Search {
 	/// Attributes
 	protected currentNode: TreeNode | null;
-	protected openNodes: Array<TreeNode>;
-	protected closedNodes: Array<TreeNode>;
-	protected sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
+	private openNodes: Array<TreeNode>;
+	private closedNodes: Array<TreeNode>;
+	private sortingFunction: (a: TreeEdge, b: TreeEdge) => number;
 
 	/// Constructor
 	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
@@ -26,7 +26,7 @@ export default abstract class ListsSearch extends Search {
 
 	/// Getters
 	public static getAlgorithmName(): string {
-		return 'Lists Search';
+		return 'Uninformed Search';
 	}
 
 	public getOpenNodes(): Array<TreeNode> {

@@ -1,6 +1,5 @@
 import {attribute as _} from 'ts-graphviz';
 import Problem from '../Domain/Problem.js';
-import State from '../Domain/State.js';
 import WeightedTree from '../Structure/WeightedTree/WeightedTree.js';
 import WeightedTreeEdge from '../Structure/WeightedTree/WeightedTreeEdge.js';
 import WeightedTreeNode from '../Structure/WeightedTree/WeightedTreeNode.js';
@@ -9,23 +8,16 @@ import TreeEdge from '../Structure/Tree/TreeEdge.js';
 
 export default abstract class InformedSearch extends Search {
 	/// Attributes
-	protected currentNode: WeightedTreeNode;
-	protected openEdges: Array<WeightedTreeEdge>;
-	protected closedNodes: Array<WeightedTreeNode>;
-	protected sortingFunction: (
-		a: WeightedTreeEdge,
-		b: WeightedTreeEdge,
-	) => number;
+	private currentNode: WeightedTreeNode;
+	private openEdges: Array<WeightedTreeEdge>;
+	private closedNodes: Array<WeightedTreeNode>;
+	private sortingFunction: (a: WeightedTreeEdge, b: WeightedTreeEdge) => number;
 
 	/// Constructor
 	constructor(
 		sortingFunction: (a: WeightedTreeEdge, b: WeightedTreeEdge) => number,
-		tree?: WeightedTree,
+		tree: WeightedTree,
 	) {
-		if (!tree) {
-			const state = new State();
-			tree = new WeightedTree(state);
-		}
 		super(tree);
 		this.currentNode = tree.getRoot() as WeightedTreeNode;
 		this.openEdges = [];
@@ -35,7 +27,7 @@ export default abstract class InformedSearch extends Search {
 
 	/// Getters
 	public static getAlgorithmName(): string {
-		return 'Informed Lists Search';
+		return 'Informed Uninformed Search';
 	}
 
 	public getOpenEdges(): Array<WeightedTreeEdge> {

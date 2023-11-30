@@ -1,8 +1,8 @@
-import ListsSearch from './ListsSearch.js';
+import UninformedSearch from './UninformedSearch.ts';
 import TreeEdge from '../Structure/Tree/TreeEdge.js';
 import TreeNode from '../Structure/Tree/TreeNode.js';
 
-export default class DepthFirstSearch extends ListsSearch {
+export default class DepthFirstSearch extends UninformedSearch {
 	/// Constructor
 	constructor(sortingFunction: (a: TreeEdge, b: TreeEdge) => number) {
 		super(sortingFunction);

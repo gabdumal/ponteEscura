@@ -33,19 +33,18 @@ export default function InformedSearchProcedure(
 		const directory = `images/${searchAlgorithmSafeName}`;
 		fs.mkdirSync(directory, {recursive: true});
 
-		const dotTreeString = searchAlgorithm
-			.getTree()
-			.exportToDot({solutionPathNodes});
+		const dotTreeString = searchAlgorithm.getTree().toDot({solutionPathNodes});
 		OrderedTree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 
-		// const dotOpenNodesString = OrderedTree.exportNodesListToDot(
-		// 	searchAlgorithm.getOpenNodes() as Array<OrderedTreeNode>,
-		// );
-		// OrderedTree.exportToFile(
-		// 	dotOpenNodesString,
-		// 	`${directory}/openNodes`,
-		// 	'svg',
-		// );
+		let openNodes: Array<OrderedTreeNode> = searchAlgorithm
+			.getOpenEdges()
+			.map(edge => edge.getTargetNode() as OrderedTreeNode);
+		const dotOpenNodesString = OrderedTree.exportNodesListToDot(openNodes);
+		OrderedTree.exportToFile(
+			dotOpenNodesString,
+			`${directory}/openNodes`,
+			'svg',
+		);
 
 		const dotClosedNodesString = OrderedTree.exportNodesListToDot(
 			searchAlgorithm.getClosedNodes() as Array<OrderedTreeNode>,

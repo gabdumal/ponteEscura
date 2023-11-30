@@ -1,3 +1,4 @@
+import {attribute as _, Node as GraphvizNode} from 'ts-graphviz';
 import Rule from '../../Domain/Rule.js';
 import State from '../../Domain/State.js';
 import TreeEdge from '../Tree/TreeEdge.js';
@@ -47,5 +48,13 @@ export default abstract class WeightedTreeNode extends TreeNode {
 		const edge = new WeightedTreeEdge(this, targetNode, rule);
 		if (connect) this.targetEdges.push(edge);
 		return edge;
+	}
+
+	public toDot(isInSolutionPath: boolean): GraphvizNode {
+		const dotNode = new GraphvizNode(this.getId().toString(), {
+			[_.label]: `${this.getId().toString()}. {W${this.getWeight()} | H${this.getHeuristic()} | V${this.getValue()}}\n${this.getState().getPlainTextScenery()}`,
+			[_.color]: isInSolutionPath ? 'orange' : this.getDotColor(),
+		});
+		return dotNode;
 	}
 }

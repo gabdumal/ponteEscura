@@ -55,7 +55,7 @@ export default function DynamicTreeGame() {
 			const directory = `images/Dynamic_Tree_Game`;
 			fs.mkdirSync(directory, {recursive: true});
 
-			const dot = tree.exportToDot({solutionPathNodes: solutionPathNodes});
+			const dot = tree.toDot({solutionPathNodes: solutionPathNodes});
 			Tree.exportToFile(dot, `${directory}/Dynamic_Tree_Game`, 'svg');
 		}
 	}

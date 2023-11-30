@@ -51,7 +51,7 @@ export default abstract class BasicStructure {
 		}
 	}
 
-	public abstract exportToDot({
+	public abstract toDot({
 		attributes,
 	}: {
 		attributes?: GraphAttributesObject;
@@ -64,10 +64,5 @@ export default abstract class BasicStructure {
 		format: Format,
 	): Promise<void> {
 		await toFile(dotString, `./${imageName}.${format}`, {format: format});
-	}
-
-	protected static getDotNodeColor(node: BasicNode): string {
-		const outcome = node.getState().getOutcome();
-		return outcome.isTerminal ? (outcome.win ? 'green' : 'red') : 'black';
 	}
 }

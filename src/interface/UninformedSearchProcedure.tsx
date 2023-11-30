@@ -1,24 +1,26 @@
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
-import {Option} from '../App.jsx';
+import {Option} from '../App.js';
 import Tree from '../engine/Structure/Tree/Tree.js';
 import TreeNode from '../engine/Structure/Tree/TreeNode.js';
 import TreeEdge from '../engine/Structure/Tree/TreeEdge.js';
 import BreadthFirstSearch from '../engine/Search/BreadthFirstSearch.js';
 import DepthFirstSearch from '../engine/Search/DepthFirstSearch.js';
-import ListsSearch from '../engine/Search/ListsSearch.js';
+import UninformedSearch from '../engine/Search/UninformedSearch.js';
 
-interface ListsSearchProcedureProps {
+interface UninformedSearchProcedureProps {
 	searchAlgorithm: Option.BreadthFirstSearch | Option.DepthFirstSearch;
 }
-export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
+export default function UninformedSearchProcedure(
+	props: UninformedSearchProcedureProps,
+) {
 	useEffect(() => {
 		const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
 			return a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
 		};
 
-		let searchAlgorithm: ListsSearch;
+		let searchAlgorithm: UninformedSearch;
 		let searchAlgorithmSafeName: string;
 		if (props.searchAlgorithm === Option.BreadthFirstSearch) {
 			searchAlgorithm = new BreadthFirstSearch(sortingFunction);
@@ -40,9 +42,7 @@ export default function ListsSearchProcedure(props: ListsSearchProcedureProps) {
 		const directory = `images/${searchAlgorithmSafeName}`;
 		fs.mkdirSync(directory, {recursive: true});
 
-		const dotTreeString = searchAlgorithm
-			.getTree()
-			.exportToDot({solutionPathNodes});
+		const dotTreeString = searchAlgorithm.getTree().toDot({solutionPathNodes});
 		Tree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 
 		const dotOpenNodesString = Tree.exportNodesListToDot(

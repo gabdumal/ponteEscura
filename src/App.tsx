@@ -3,8 +3,8 @@ import {Box, Text} from 'ink';
 import CommonGame from './interface/CommonGame.jsx';
 import SelectInput from 'ink-select-input';
 import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
-import ListsSearchProcedure from './interface/ListsSearchProcedure.jsx';
-import WeightedListsSearchProcedure from './interface/InformedSearchProcedure.tsx';
+import UninformedSearchProcedure from './interface/UninformedSearchProcedure.jsx';
+import WeightedUninformedSearchProcedure from './interface/InformedSearchProcedure.tsx';
 import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
 
 export enum Option {
@@ -71,17 +71,21 @@ export default function App() {
 			break;
 		case Option.BreadthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure searchAlgorithm={Option.BreadthFirstSearch} />
+				<UninformedSearchProcedure
+					searchAlgorithm={Option.BreadthFirstSearch}
+				/>
 			);
 			break;
 		case Option.DepthFirstSearch:
 			interfaceComponent = (
-				<ListsSearchProcedure searchAlgorithm={Option.DepthFirstSearch} />
+				<UninformedSearchProcedure searchAlgorithm={Option.DepthFirstSearch} />
 			);
 			break;
 		case Option.OrderedSearch:
 			interfaceComponent = (
-				<WeightedListsSearchProcedure searchAlgorithm={Option.OrderedSearch} />
+				<WeightedUninformedSearchProcedure
+					searchAlgorithm={Option.OrderedSearch}
+				/>
 			);
 			break;
 		default:

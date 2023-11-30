@@ -13,7 +13,7 @@ export default class WeightedTreeEdge extends TreeEdge {
 		rule: Rule,
 	) {
 		super(sourceNode, targetNode, rule);
-		this.accumulatedWeight = targetNode.getWeight() + rule.getElapsedTime();
+		this.accumulatedWeight = sourceNode.getWeight() + rule.getElapsedTime();
 	}
 
 	/// Getters

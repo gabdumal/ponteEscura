@@ -1,7 +1,6 @@
 import {
 	attribute as _,
 	Digraph as GraphvizDigraph,
-	Node as GraphvizNode,
 	Edge as GraphvizEdge,
 	toDot,
 	GraphAttributesObject,
@@ -74,7 +73,7 @@ export default class Tree extends BasicStructure {
 		return null;
 	}
 
-	public exportToDot({
+	public toDot({
 		attributes,
 		solutionPathNodes,
 	}: {
@@ -92,8 +91,7 @@ export default class Tree extends BasicStructure {
 
 		const edges: Array<TreeEdge> = [];
 		if (this.root !== null) {
-			const dotRootNode = Tree.getDotNode(
-				this.root,
+			const dotRootNode = this.root.toDot(
 				solutionPathNodes !== undefined &&
 					solutionPathNodes.includes(this.root),
 			);
@@ -112,8 +110,7 @@ export default class Tree extends BasicStructure {
 				const targetNodeIsInSolutionPath =
 					solutionPathNodes !== undefined &&
 					solutionPathNodes.includes(targetNode);
-				const dotTargetNode = Tree.getDotNode(
-					targetNode,
+				const dotTargetNode = targetNode.toDot(
 					solutionPathNodes !== undefined &&
 						solutionPathNodes.includes(targetNode),
 				);
@@ -146,19 +143,6 @@ export default class Tree extends BasicStructure {
 		return path;
 	}
 
-	public static getDotNode(
-		node: TreeNode,
-		isInSolutionPath: boolean = false,
-	): GraphvizNode {
-		const dotNode = new GraphvizNode(node.getId().toString(), {
-			[_.label]: `${node.getId().toString()}. ${node
-				.getState()
-				.getPlainTextScenery()}`,
-			[_.color]: isInSolutionPath ? 'orange' : Tree.getDotNodeColor(node),
-		});
-		return dotNode;
-	}
-
 	public static exportNodesListToDot(
 		nodesList: Array<TreeNode>,
 		attributes?: GraphAttributesObject,
@@ -172,7 +156,7 @@ export default class Tree extends BasicStructure {
 		};
 		const dotGraph = new GraphvizDigraph('G', attributes);
 		for (const node of nodesList) {
-			const dotNode = Tree.getDotNode(node, false);
+			const dotNode = node.toDot(false);
 			dotGraph.addNode(dotNode);
 		}
 		return toDot(dotGraph);

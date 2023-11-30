@@ -67,4 +67,9 @@ export default abstract class BasicNode {
 	}
 
 	public abstract checkIfThereIsLoop(state: State): boolean;
+
+	public getDotColor(): string {
+		const outcome = this.getState().getOutcome();
+		return outcome.isTerminal ? (outcome.win ? 'green' : 'red') : 'black';
+	}
 }

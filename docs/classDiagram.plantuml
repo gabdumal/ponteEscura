@@ -2,6 +2,7 @@
 
     ' Config
     hide empty members
+    skinparam groupInheritance 2
     ' skinparam classAttributeIconSize 0
     ' left to right direction
 
@@ -25,19 +26,35 @@
         class BasicNode
         class BasicStructure
 
-        package Tree <<Rectangle>> {
+        package "Tree" as PK_Tree <<Rectangle>> {
             class TreeEdge
             class TreeNode
             class Tree
+
+            package "WeightedTree" as PK_WeightedTree <<Rectangle>> {
+                class WeightedTreeEdge
+                abstract class WeightedTreeNode
+                abstract class WeightedTree
+            }
         }
     }
 
     package Searches <<Rectangle>> {
         abstract class Search
-        abstract class ListsSearch
-        class BreadthFirstSearch
-        class DepthFirstSearch
-        class BacktrackingSearch
+
+        package "UninformedSearch" as PK_UninformedSearch <<Rectangle>> {
+        abstract class UninformedSearch
+            class BacktrackingSearch
+            class BreadthFirstSearch
+            class DepthFirstSearch
+        }
+
+        package "InformedSearch" as PK_InformedSearch <<Rectangle>> {
+            class InformedSearch
+            class OrderedSearch
+            class GreedySearch
+            class AStarSearch
+        }
     }
 
 
@@ -99,10 +116,12 @@
         -state: State
         -targetEdges: BasicEdge[]
         #{abstract}addSourceEdge(sourceNode: BasicNode, rule: Rule): BasicEdge | null
-        -addTargetEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
+        #addTargetEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
         +addEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
         +connectTargetEdges(targetEdges: BasicEdge[]): void
         +{abstract}checkIfThereIsLoop(state: State): boolean
+        +getDotColor(): string
+        +toDot(): string
     }
 
     abstract class BasicStructure {
@@ -110,24 +129,36 @@
         #{abstract}instantiateNode(id: number, state: State): BasicNode
         #createNode(state: State): BasicNode
         +{abstract}createValidTransitions(node: BasicNode, sortingFunction: Function): BasicEdge[]
-        +{abstract}exportToDot(): string
+        +{abstract}toDot(): string
     }
 
     class TreeEdge {}
 
     class TreeNode {
         -sourceEdge: TreeEdge | null
+        #addSourceEdge(sourceNode: TreeNode, rule: Rule): TreeEdge | null
+        +checkIfThereIsLoop(state: State): boolean
+        +checkIfTransitionAlreadyExists(rule: Rule): boolean
     }
 
     class Tree {
-        -rootNode: TreeNode
+        -root: TreeNode
         +createNextValidTransition(node: TreeNode, \nsortingFunction: Function): TreeEdge | null
         +{static}getAscendingPath(node: TreeNode): TreeEdge[]
     }
 
+    class WeightedTreeEdge {
+        -weight: number
+    }
+
+    abstract class WeightedTreeNode {
+        +getWeight(): number
+        {abstract}+getHeuristic(): number
+        +getValue(): number
+    }
+
     abstract class Search {
         #tree: Tree
-        +getTree(): Tree
         +{static}getAlgorithmName(): string
         +{static}getSafeAlgorithmName(): string
         +{abstract}search(maxIterations?: number): TreeEdge[]
@@ -138,15 +169,22 @@
         -doBacktracking(startNode: TreeNode): \n{foundNode: TreeNode, isSolution: boolean}
     }
 
-    abstract class ListsSearch {
+    abstract class UninformedSearch {
         #currentNode: TreeNode
-        #openNodes: TreeNode[]
-        #closedNodes: TreeNode[]
+        -openNodes: TreeNode[]
+        -closedNodes: TreeNode[]
         {field}-sortingFunction: (TreeEdge, TreeEdge) => number
         {abstract}+getCurrentNode(): TreeNode
-        +getOpenNodes(): TreeNode[]
-        +getClosedNodes(): TreeNode[]
         -doIteration(): TreeEdge[] | null
+    }
+
+    abstract class UninformedSearch {
+        -currentNode: WeightedTreeNode
+        -openEdges: WeightedTreeEdge[]
+        -closedNodes: WeightedTreeNode[]
+        {field}-sortingFunction: (WeightedTreeEdge, WeightedTreeEdge) => number
+        #updateCurrentNode(): void
+        -doIteration(currentNode: WeightedTreeNode): WeightedTreeEdge[] | null
     }
 
 
@@ -162,14 +200,25 @@
     TreeEdge --|> BasicEdge
     TreeNode --|> BasicNode
     Tree --|> BasicStructure
-    ListsSearch --|> Search
     BacktrackingSearch --|> Search
-    BreadthFirstSearch --|> ListsSearch
-    DepthFirstSearch --|> ListsSearch
+    UninformedSearch --|> Search
+    InformedSearch --|> Search
+    BreadthFirstSearch --|> UninformedSearch
+    DepthFirstSearch --|> UninformedSearch
+    OrderedSearch -l-|> InformedSearch
+    GreedySearch -d-|> InformedSearch
+    AStarSearch -do-|> InformedSearch
+    WeightedTreeEdge --|> TreeEdge
+    WeightedTreeNode --|> TreeNode
+    WeightedTree --|> Tree
 
     Item -[hidden]left- RiverBank
     RiverBank -[hidden]left- Outcome
-    ListsSearch --[hidden]down-> Item
+    UninformedSearch --[hidden]down-> Item
+    GreedySearch -[hidden]r- AStarSearch
+    AStarSearch -[hidden]d- OrderedSearch
+    WeightedTree -[hidden]d- WeightedTreeNode
+    WeightedTreeNode -[hidden]d- WeightedTreeEdge
 
 
 @enduml
