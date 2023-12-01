@@ -6,20 +6,19 @@ export default class AStarTreeNode extends WeightedTreeNode {
 	/// Getters
 	private getHeuristic(): number {
 		const state = this.getState();
+
 		const initialRiverBankItems = state.getRiverBankItems(RiverBank.Initial);
 		const initialRiverBankValue = initialRiverBankItems.reduce(
 			(accumulator, item) => accumulator + item,
 			0,
 		);
-		const finalRiverBankItems = state.getRiverBankItems(RiverBank.Final);
-		const finalRiverBankValue = finalRiverBankItems.reduce(
-			(accumulator, item) => accumulator + item,
-			0,
-		);
-		const conditionalValue =
-			state.getLampPosition() === RiverBank.Final
-				? Math.min(...finalRiverBankItems)
-				: 0;
+
+		let conditionalValue = 0;
+		if (state.getLampPosition() === RiverBank.Final) {
+			const finalRiverBankItems = state.getRiverBankItems(RiverBank.Final);
+			const auxArray = finalRiverBankItems.filter(item => item !== 0);
+			conditionalValue = Math.min(...auxArray);
+		}
 		const heuristic = initialRiverBankValue + conditionalValue;
 		return heuristic;
 	}
