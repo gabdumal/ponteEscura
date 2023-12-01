@@ -35,6 +35,9 @@
                 class WeightedTreeEdge
                 abstract class WeightedTreeNode
                 abstract class WeightedTree
+                class OrderedTreeNode
+                class GreedyTreeNode
+                class AStarTreeNode
             }
         }
     }
@@ -153,8 +156,15 @@
 
     abstract class WeightedTreeNode {
         +getWeight(): number
-        {abstract}+getHeuristic(): number
-        +getValue(): number
+        {abstract}+getValue(): number
+    }
+
+    class GreedyTreeNode {
+        -getHeuristic(): number
+    }
+
+    class AStarTreeNode {
+        -getHeuristic(): number
     }
 
     abstract class Search {
@@ -190,13 +200,13 @@
 
     ' Relacionamentos
 
-    Rule "1" --> "0..n" BasicEdge : Represents
-    Problem "1" *-- "1..n" Rule
-    BasicNode "1" --> "0..n" BasicEdge : Has Target
-    BasicNode "1" --> "1" State : Has State
+    Rule "1" <-- "0..n" BasicEdge : Represents
+    Problem "1" *-- "1..n" Rule : Has rules
+    BasicNode "1" --> "0..n" BasicEdge : Has target
+    BasicNode "1" --> "1" State : Has state
     TreeNode "1" --> "0..1" TreeEdge : Has source
     Tree "1" --> "1" TreeNode : Has root
-    Tree "1" <-- "1" Search : Has tree
+    Tree "1" <-- "1" Search : Construct tree
     TreeEdge --|> BasicEdge
     TreeNode --|> BasicNode
     Tree --|> BasicStructure
@@ -211,6 +221,9 @@
     WeightedTreeEdge --|> TreeEdge
     WeightedTreeNode --|> TreeNode
     WeightedTree --|> Tree
+    OrderedTreeNode ---|> WeightedTreeNode
+    GreedyTreeNode --|> WeightedTreeNode
+    AStarTreeNode -|> WeightedTreeNode
 
     Item -[hidden]left- RiverBank
     RiverBank -[hidden]left- Outcome
@@ -218,7 +231,10 @@
     GreedySearch -[hidden]r- AStarSearch
     AStarSearch -[hidden]d- OrderedSearch
     WeightedTree -[hidden]d- WeightedTreeNode
-    WeightedTreeNode -[hidden]d- WeightedTreeEdge
+    AStarTreeNode -[hidden]d- WeightedTreeEdge
+    ' WeightedTreeNode -- WeightedTreeEdge
+    ' OrderedTreeNode -- GreedyTreeNode
+    ' GreedyTreeNode -- AStarTreeNode
 
 
 @enduml

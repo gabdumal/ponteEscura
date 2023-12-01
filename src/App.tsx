@@ -14,6 +14,8 @@ export enum Option {
 	BreadthFirstSearch,
 	DepthFirstSearch,
 	OrderedSearch,
+	GreedySearch,
+	AStarSearch,
 }
 
 export default function App() {
@@ -42,6 +44,14 @@ export default function App() {
 		{
 			label: 'Busca Ordenada',
 			value: Option.OrderedSearch,
+		},
+		{
+			label: 'Busca Gulosa',
+			value: Option.GreedySearch,
+		},
+		{
+			label: 'Busca A*',
+			value: Option.AStarSearch,
 		},
 	];
 
@@ -85,6 +95,20 @@ export default function App() {
 			interfaceComponent = (
 				<WeightedUninformedSearchProcedure
 					searchAlgorithm={Option.OrderedSearch}
+				/>
+			);
+			break;
+		case Option.GreedySearch:
+			interfaceComponent = (
+				<WeightedUninformedSearchProcedure
+					searchAlgorithm={Option.GreedySearch}
+				/>
+			);
+			break;
+		case Option.AStarSearch:
+			interfaceComponent = (
+				<WeightedUninformedSearchProcedure
+					searchAlgorithm={Option.AStarSearch}
 				/>
 			);
 			break;

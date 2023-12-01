@@ -21,11 +21,7 @@ export default abstract class WeightedTreeNode extends TreeNode {
 		}
 	}
 
-	protected abstract getHeuristic(): number;
-
-	public getValue(): number {
-		return this.getWeight() + this.getHeuristic();
-	}
+	public abstract getValue(): number;
 
 	/// Methods
 	protected addSourceEdge(
@@ -52,7 +48,7 @@ export default abstract class WeightedTreeNode extends TreeNode {
 
 	public toDot(isInSolutionPath: boolean): GraphvizNode {
 		const dotNode = new GraphvizNode(this.getId().toString(), {
-			[_.label]: `${this.getId().toString()}. {W${this.getWeight()} | H${this.getHeuristic()} | V${this.getValue()}}\n${this.getState().getPlainTextScenery()}`,
+			[_.label]: `${this.getId().toString()}. {W${this.getWeight()} | V${this.getValue()}}\n${this.getState().getPlainTextScenery()}`,
 			[_.color]: isInSolutionPath ? 'orange' : this.getDotColor(),
 		});
 		return dotNode;

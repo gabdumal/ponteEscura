@@ -6,9 +6,14 @@ import OrderedTreeNode from '../engine/Structure/OrderedTree/OrderedTreeNode.js'
 import OrderedTree from '../engine/Structure/OrderedTree/OrderedTree.js';
 import InformedSearch from '../engine/Search/InformedSearch.js';
 import OrderedSearch from '../engine/Search/OrderedSearch.js';
+import GreedySearch from '../engine/Search/GreedySearch.js';
+import AStarSearch from '../engine/Search/AStarSearch.js';
 
 interface InformedSearchProcedureProps {
-	searchAlgorithm: Option.OrderedSearch;
+	searchAlgorithm:
+		| Option.OrderedSearch
+		| Option.GreedySearch
+		| Option.AStarSearch;
 }
 export default function InformedSearchProcedure(
 	props: InformedSearchProcedureProps,
@@ -16,8 +21,17 @@ export default function InformedSearchProcedure(
 	useEffect(() => {
 		let searchAlgorithm: InformedSearch;
 		let searchAlgorithmSafeName: string;
-		searchAlgorithm = new OrderedSearch();
-		searchAlgorithmSafeName = OrderedSearch.getSafeAlgorithmName();
+
+		if (props.searchAlgorithm === Option.OrderedSearch) {
+			searchAlgorithm = new OrderedSearch();
+			searchAlgorithmSafeName = OrderedSearch.getSafeAlgorithmName();
+		} else if (props.searchAlgorithm === Option.GreedySearch) {
+			searchAlgorithm = new GreedySearch();
+			searchAlgorithmSafeName = GreedySearch.getSafeAlgorithmName();
+		} else {
+			searchAlgorithm = new AStarSearch();
+			searchAlgorithmSafeName = AStarSearch.getSafeAlgorithmName();
+		}
 
 		const solutionPath = searchAlgorithm.search();
 		let solutionPathNodes: Array<OrderedTreeNode> = [];
