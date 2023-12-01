@@ -1,7 +1,6 @@
 import {
 	attribute as _,
 	Digraph as GraphvizDigraph,
-	Node as GraphvizNode,
 	Edge as GraphvizEdge,
 	toDot,
 	GraphAttributesObject,
@@ -21,6 +20,15 @@ export default class Graph extends BasicStructure {
 		this.nodes = [];
 	}
 
+	/// Getters
+	public getNodesAmmount(): number {
+		return this.nodes.length;
+	}
+
+	public getNode(index: number): GraphNode {
+		return this.nodes[index];
+	}
+
 	/// Methods
 	protected instantiateNode(id: number, state: State): GraphNode {
 		return new GraphNode(id, state);
@@ -32,38 +40,40 @@ export default class Graph extends BasicStructure {
 		return node;
 	}
 
+	public searchNode(state: State): GraphNode | null {
+		const node = this.nodes.find(node => node.getState().equalsByItems(state));
+		return node ? node : null;
+	}
+
 	public createValidTransitions(node: GraphNode): Array<GraphEdge> {
-		const validRules = node.getState().getValidRules();
+		const validRules = node.getState().getValidRules(true);
 		const edges = [];
 		for (const rule of validRules) {
 			const newState = rule.transpose(node.getState());
-			if (!node.checkIfThereIsLoop(newState)) {
-				const newNode = this.addNode(newState);
-				const edge = node.addEdge(newNode, rule);
-				edges.push(edge);
+			let newNode: GraphNode | null = this.searchNode(newState);
+			if (newNode === null) {
+				newNode = this.addNode(newState);
 			}
+			const edge = node.addEdge(newNode, rule);
+			edges.push(edge);
 		}
 		return edges;
 	}
 
 	public toDot({attributes}: {attributes?: GraphAttributesObject}): string {
 		attributes = {
+			labelloc: 't',
+			fontsize: 30,
 			splines: 'true',
 			nodesep: 0.5,
-			ranksep: 3,
+			ranksep: 2,
 			rankdir: 'LR',
 			...attributes,
 		};
 		const dotGraph = new GraphvizDigraph('G', attributes);
 
 		for (const node of this.nodes) {
-			const dotNode = new GraphvizNode(node.getId().toString(), {
-				[_.label]: `${node.getId().toString()}. ${node
-					.getState()
-					.getPlainTextScenery()}`,
-				[_.color]: node.getDotColor(),
-			});
-
+			const dotNode = node.toDot(false);
 			dotGraph.addNode(dotNode);
 		}
 
@@ -84,6 +94,13 @@ export default class Graph extends BasicStructure {
 			}
 		}
 
+		const infoNodes = `Nós: ${dotGraph.nodes.length}\n`;
+		const infoEdges = `Arestas: ${dotGraph.edges.length}\n`;
+		const infoLabel = `${infoNodes}${infoEdges}`;
+		const label = attributes?.label
+			? `${attributes.label}\n${infoLabel}\n\n`
+			: infoLabel;
+		dotGraph.set('label', label);
 		const dot = toDot(dotGraph);
 		return dot;
 	}

@@ -1,11 +1,12 @@
 import React from 'react';
 import {Box, Text} from 'ink';
-import CommonGame from './interface/CommonGame.jsx';
 import SelectInput from 'ink-select-input';
+import CommonGame from './interface/CommonGame.jsx';
 import DynamicTreeGame from './interface/DynamicTreeGame.jsx';
 import UninformedSearchProcedure from './interface/UninformedSearchProcedure.jsx';
-import WeightedUninformedSearchProcedure from './interface/InformedSearchProcedure.tsx';
+import WeightedUninformedSearchProcedure from './interface/InformedSearchProcedure.jsx';
 import BacktrackingSearchProcedure from './interface/BacktrackingSearchProcedure.jsx';
+import DomainRepresentationProcedure from './interface/DomainRepresentationProcedure.jsx';
 
 export enum Option {
 	CommonGame,
@@ -16,6 +17,9 @@ export enum Option {
 	OrderedSearch,
 	GreedySearch,
 	AStarSearch,
+	Rules,
+	States,
+	SearchSpace,
 }
 
 export default function App() {
@@ -52,6 +56,18 @@ export default function App() {
 		{
 			label: 'Busca A*',
 			value: Option.AStarSearch,
+		},
+		{
+			label: 'Regras',
+			value: Option.Rules,
+		},
+		{
+			label: 'Estados',
+			value: Option.States,
+		},
+		{
+			label: 'Espaço de Busca',
+			value: Option.SearchSpace,
 		},
 	];
 
@@ -110,6 +126,21 @@ export default function App() {
 				<WeightedUninformedSearchProcedure
 					searchAlgorithm={Option.AStarSearch}
 				/>
+			);
+			break;
+		case Option.Rules:
+			interfaceComponent = (
+				<DomainRepresentationProcedure representation={Option.Rules} />
+			);
+			break;
+		case Option.States:
+			interfaceComponent = (
+				<DomainRepresentationProcedure representation={Option.States} />
+			);
+			break;
+		case Option.SearchSpace:
+			interfaceComponent = (
+				<DomainRepresentationProcedure representation={Option.SearchSpace} />
 			);
 			break;
 		default:

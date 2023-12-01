@@ -137,7 +137,7 @@ export default class Tree extends BasicStructure {
 			: '';
 		const infoLabel = `${infoNodes}${infoSolutionPath}`;
 		const label = attributes?.label
-			? `${attributes.label}\n${infoLabel}`
+			? `${attributes.label}\n${infoLabel}\n\n`
 			: infoLabel;
 		dotGraph.set('label', label);
 		const dot = toDot(dotGraph);

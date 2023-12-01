@@ -1,3 +1,4 @@
+import {attribute as _, Node as GraphvizNode} from 'ts-graphviz';
 import Problem, {Item} from './Problem.js';
 import State, {RiverBank} from './State.js';
 
@@ -41,8 +42,6 @@ export default class Rule {
 		)}] (${this.getElapsedTime()})`;
 	}
 
-	/// Setters
-
 	/// Methods
 	public transpose(state: State): State {
 		const lampPosition =
@@ -79,5 +78,12 @@ export default class Rule {
 		);
 
 		return transposedState;
+	}
+
+	public toDot(): GraphvizNode {
+		const dotNode = new GraphvizNode(this.getId().toString(), {
+			[_.label]: `${this.getId().toString()}. ${this.getPlainText()}`,
+		});
+		return dotNode;
 	}
 }

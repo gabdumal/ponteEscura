@@ -1,3 +1,4 @@
+import {attribute as _, Node as GraphvizNode} from 'ts-graphviz';
 import {Outcome} from '../../types.js';
 import Problem, {Item} from './Problem.js';
 import Rule from './Rule.js';
@@ -43,7 +44,7 @@ export default class State {
 		return this.remainingTime;
 	}
 
-	public getValidRules() {
+	public getValidRules(ignoreTime = false): Array<Rule> {
 		const lampPosition = this.getLampPosition();
 		const currentRiverBank = this.getRiverBankItems(lampPosition);
 
@@ -53,13 +54,18 @@ export default class State {
 			const item1 = currentRiverBank[i];
 			if (item1 === Item.Lamp) continue;
 			currentRule = Problem.getRule(item1);
-			if (this.remainingTime - currentRule.getElapsedTime() < 0) continue;
+			if (!ignoreTime && this.remainingTime - currentRule.getElapsedTime() < 0)
+				continue;
 			validRules.push(currentRule);
 			for (let j = i - 1; j >= 0; j--) {
 				const item2 = currentRiverBank[j];
 				if (item2 === Item.Lamp) continue;
 				currentRule = Problem.getRule(item1, item2);
-				if (this.remainingTime - currentRule.getElapsedTime() < 0) continue;
+				if (
+					!ignoreTime &&
+					this.remainingTime - currentRule.getElapsedTime() < 0
+				)
+					continue;
 				validRules.push(currentRule);
 			}
 		}
@@ -83,14 +89,16 @@ export default class State {
 		}
 	}
 
-	public getPlainTextScenery() {
+	public getPlainTextScenery(showTime: boolean = true) {
 		const initialRiverBank = this.getRiverBankSymbols(RiverBank.Initial);
 		const finalRiverBank = this.getRiverBankSymbols(RiverBank.Final);
 
 		const initialRiverBankString = initialRiverBank.join(' ');
 		const finalRiverBankString = finalRiverBank.join(' ');
 
-		return `[${initialRiverBankString}] [${finalRiverBankString}] (${this.remainingTime})`;
+		const scenery = `[${initialRiverBankString}] [${finalRiverBankString}]`;
+		if (showTime) return `${scenery} (${this.remainingTime})`;
+		else return scenery;
 	}
 
 	/// Setters

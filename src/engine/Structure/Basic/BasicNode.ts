@@ -1,3 +1,4 @@
+import {attribute as _, Node as GraphvizNode} from 'ts-graphviz';
 import BasicEdge from './BasicEdge.js';
 import Rule from '../../Domain/Rule.js';
 import State from '../../Domain/State.js';
@@ -71,5 +72,14 @@ export default abstract class BasicNode {
 	public getDotColor(): string {
 		const outcome = this.getState().getOutcome();
 		return outcome.isTerminal ? (outcome.win ? 'green' : 'red') : 'black';
+	}
+
+	public toDot(showTime: boolean = true): GraphvizNode {
+		const dotNode = new GraphvizNode(this.getId().toString(), {
+			[_.label]: `${this.getId().toString()}. ${this.getState().getPlainTextScenery(
+				showTime,
+			)}`,
+		});
+		return dotNode;
 	}
 }

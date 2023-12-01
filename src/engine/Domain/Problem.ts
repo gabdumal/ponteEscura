@@ -1,5 +1,16 @@
+import {
+	attribute as _,
+	Digraph as GraphvizDigraph,
+	toDot,
+	GraphAttributesObject,
+} from 'ts-graphviz';
 import Rule from './Rule.js';
 import State from './State.js';
+import BasicEdge from '../Structure/Basic/BasicEdge.ts';
+import Tree from '../Structure/Tree/Tree.ts';
+import TreeEdge from '../Structure/Tree/TreeEdge.ts';
+import Graph from '../Structure/Graph/Graph.ts';
+import GraphNode from '../Structure/Graph/GraphNode.ts';
 
 export enum Item {
 	Lamp = 0,
@@ -130,5 +141,66 @@ export default class Problem {
 	public static isSolution(state: State) {
 		const outcome = state.getOutcome();
 		return outcome.isTerminal && outcome.win;
+	}
+
+	public static exportRulesToDot({
+		attributes,
+	}: {
+		attributes?: GraphAttributesObject;
+	}): string {
+		attributes = {
+			labelloc: 't',
+			fontsize: 30,
+			splines: 'true',
+			nodesep: 0.5,
+			ranksep: 3,
+			rankdir: 'LR',
+			...attributes,
+		};
+
+		const dotGraph = new GraphvizDigraph('G', attributes);
+		for (const rule of this.rules) {
+			const dotNode = rule.toDot();
+			dotGraph.addNode(dotNode);
+		}
+
+		const infoLabel = `Regras: ${this.rules.length}\n`;
+		const label = attributes?.label
+			? `${attributes.label}\n${infoLabel}\n\n`
+			: infoLabel;
+		dotGraph.set('label', label);
+		const dot = toDot(dotGraph);
+		return dot;
+	}
+
+	public static exportViableStatesToDot(): string {
+		const graph = new Graph();
+		let node = graph.addNode(new State());
+		for (let i = 0; i < graph.getNodesAmmount(); i++) {
+			node = graph.getNode(i);
+			if (node === null) continue;
+			const validRules = node.getState().getValidRules(true);
+			for (const rule of validRules) {
+				const newState = rule.transpose(node.getState());
+				let newNode: GraphNode | null = graph.searchNode(newState);
+				if (newNode === null) {
+					newNode = graph.addNode(newState);
+				}
+			}
+		}
+		const dotGraph = graph.toDot({attributes: {label: `Estados viáveis`}});
+		return dotGraph;
+	}
+
+	public static exportSearchSpaceToDot(): string {
+		const graph = new Graph();
+		let node = graph.addNode(new State());
+		for (let i = 0; i < graph.getNodesAmmount(); i++) {
+			node = graph.getNode(i);
+			if (node === null) continue;
+			graph.createValidTransitions(node);
+		}
+		const dotGraph = graph.toDot({attributes: {label: `Espaço de busca`}});
+		return dotGraph;
 	}
 }

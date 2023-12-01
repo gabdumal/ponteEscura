@@ -9,7 +9,7 @@ import BacktrackingSearch from '../engine/Search/BacktrackingSearch.js';
 export default function BacktrackingSearchProcedure() {
 	useEffect(() => {
 		function sortingAlgorithm(a: Rule, b: Rule): number {
-			// Breadth first search is a FIFO algorithm, so we sort in ascending order
+			// Backtracking search is a FIFO algorithm, so we sort in ascending order
 			let delta = a.getElapsedTime() - b.getElapsedTime();
 			if (delta === 0) {
 				// If the elapsed time is the same, it is better to choose the node with more people

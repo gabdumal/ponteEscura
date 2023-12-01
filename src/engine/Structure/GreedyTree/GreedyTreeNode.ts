@@ -16,11 +16,15 @@ export default class GreedyTreeNode extends WeightedTreeNode {
 			(accumulator, item) => accumulator + item,
 			0,
 		);
-		const conditionalValue =
-			state.getLampPosition() === RiverBank.Final
-				? Math.min(...finalRiverBankItems)
-				: 0;
-		const heuristic = initialRiverBankValue + conditionalValue;
+		let conditionalValue = 0;
+		if (state.getLampPosition() === RiverBank.Final) {
+			const auxArray = finalRiverBankItems.filter(item => item !== 0);
+			conditionalValue = Math.min(...auxArray);
+		}
+		// const heuristic = initialRiverBankValue - finalRiverBankValue;
+		// const heuristic = initialRiverBankValue + conditionalValue;
+		const heuristic =
+			initialRiverBankValue - finalRiverBankValue + conditionalValue;
 		return heuristic;
 	}
 

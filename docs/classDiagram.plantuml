@@ -123,8 +123,6 @@
         +addEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
         +connectTargetEdges(targetEdges: BasicEdge[]): void
         +{abstract}checkIfThereIsLoop(state: State): boolean
-        +getDotColor(): string
-        +toDot(): string
     }
 
     abstract class BasicStructure {
@@ -132,7 +130,6 @@
         #{abstract}instantiateNode(id: number, state: State): BasicNode
         #createNode(state: State): BasicNode
         +{abstract}createValidTransitions(node: BasicNode, sortingFunction: Function): BasicEdge[]
-        +{abstract}toDot(): string
     }
 
     class TreeEdge {}
