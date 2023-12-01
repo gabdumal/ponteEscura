@@ -24,7 +24,7 @@ export default class State {
 			Item.Lady,
 		].sort((a, b) => a - b);
 		this.finalRiverBank = [];
-		this.remainingTime = 30;
+		this.remainingTime = Problem.getMaximumTime();
 	}
 
 	/// Getters

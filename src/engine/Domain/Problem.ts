@@ -38,8 +38,13 @@ function getRules(): Array<Rule> {
 export default class Problem {
 	/// Attributes
 	private static rules: Array<Rule> = getRules();
+	private static maximumTime: number = 30;
 
 	/// Getters
+	public static getMaximumTime(): number {
+		return this.maximumTime;
+	}
+
 	public static getRule(firstPerson: Item, secondPerson?: Item): Rule {
 		for (const rule of this.rules) {
 			const travellingPeople = rule.getTravellingPeople();

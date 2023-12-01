@@ -19,6 +19,8 @@ export default abstract class WeightedTree extends Tree {
 		solutionPathNodes?: Array<WeightedTreeNode>;
 	}): string {
 		attributes = {
+			labelloc: 't',
+			fontsize: 30,
 			splines: 'true',
 			nodesep: 0.5,
 			ranksep: 3,
@@ -26,6 +28,8 @@ export default abstract class WeightedTree extends Tree {
 			...attributes,
 		};
 		const dotGraph = new GraphvizDigraph('G', attributes);
+		let nodesQuantity = 0;
+
 		const edges: Array<WeightedTreeEdge> = [];
 		if (this.root !== null) {
 			const dotRootNode = this.getRoot().toDot(
@@ -33,7 +37,9 @@ export default abstract class WeightedTree extends Tree {
 					solutionPathNodes.includes(this.getRoot() as WeightedTreeNode),
 			);
 			dotGraph.addNode(dotRootNode);
+			nodesQuantity++;
 			edges.push(...(this.root.getTargetEdges() as Array<WeightedTreeEdge>));
+
 			while (edges.length > 0) {
 				const edge = edges.shift();
 				if (edge === undefined) continue;
@@ -50,6 +56,8 @@ export default abstract class WeightedTree extends Tree {
 						solutionPathNodes.includes(targetNode),
 				);
 				dotGraph.addNode(dotTargetNode);
+				nodesQuantity++;
+
 				const dotEdge = new GraphvizEdge([dotSourceNode, dotTargetNode], {
 					[_.label]: `${edge.getRule().getId()}. ${edge
 						.getRule()
@@ -59,6 +67,16 @@ export default abstract class WeightedTree extends Tree {
 				dotGraph.addEdge(dotEdge);
 			}
 		}
+
+		const infoNodes = `Nós: ${nodesQuantity}\n`;
+		const infoSolutionPath = solutionPathNodes
+			? `Nós no caminho solução: ${solutionPathNodes.length}\n`
+			: '';
+		const infoLabel = `${infoNodes}${infoSolutionPath}`;
+		const label = attributes?.label
+			? `${attributes.label}\n${infoLabel}`
+			: infoLabel;
+		dotGraph.set('label', label);
 		const dot = toDot(dotGraph);
 		return dot;
 	}

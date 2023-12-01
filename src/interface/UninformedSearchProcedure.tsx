@@ -16,16 +16,58 @@ export default function UninformedSearchProcedure(
 	props: UninformedSearchProcedureProps,
 ) {
 	useEffect(() => {
-		const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
-			return a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
-		};
-
 		let searchAlgorithm: UninformedSearch;
 		let searchAlgorithmSafeName: string;
 		if (props.searchAlgorithm === Option.BreadthFirstSearch) {
+			const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
+				// Breadth first search is a FIFO algorithm, so we sort in ascending order
+				let delta = a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
+				if (delta === 0) {
+					// If the elapsed time is the same, it is better to choose the node with more people
+					delta =
+						b.getRule().getTravellingPeople().length -
+						a.getRule().getTravellingPeople().length;
+					if (delta === 0) {
+						// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+						delta =
+							b
+								.getRule()
+								.getTravellingPeople()
+								.reduce((a, b) => a + b) -
+							a
+								.getRule()
+								.getTravellingPeople()
+								.reduce((a, b) => a + b);
+					}
+				}
+				return delta;
+			};
 			searchAlgorithm = new BreadthFirstSearch(sortingFunction);
 			searchAlgorithmSafeName = BreadthFirstSearch.getSafeAlgorithmName();
 		} else {
+			const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
+				// Depth first search is a LIFO algorithm, so we sort in descending order
+				let delta = b.getRule().getElapsedTime() - a.getRule().getElapsedTime();
+				if (delta === 0) {
+					// If the elapsed time is the same, it is better to choose the node with more people
+					delta =
+						a.getRule().getTravellingPeople().length -
+						b.getRule().getTravellingPeople().length;
+					if (delta === 0) {
+						// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+						delta =
+							a
+								.getRule()
+								.getTravellingPeople()
+								.reduce((a, b) => a + b) -
+							b
+								.getRule()
+								.getTravellingPeople()
+								.reduce((a, b) => a + b);
+					}
+				}
+				return delta;
+			};
 			searchAlgorithm = new DepthFirstSearch(sortingFunction);
 			searchAlgorithmSafeName = DepthFirstSearch.getSafeAlgorithmName();
 		}

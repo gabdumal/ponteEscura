@@ -9,13 +9,19 @@ import BacktrackingSearch from '../engine/Search/BacktrackingSearch.js';
 export default function BacktrackingSearchProcedure() {
 	useEffect(() => {
 		function sortingAlgorithm(a: Rule, b: Rule): number {
-			if (a.getElapsedTime() < b.getElapsedTime()) {
-				return -1;
+			// Breadth first search is a FIFO algorithm, so we sort in ascending order
+			let delta = a.getElapsedTime() - b.getElapsedTime();
+			if (delta === 0) {
+				// If the elapsed time is the same, it is better to choose the node with more people
+				delta = b.getTravellingPeople().length - a.getTravellingPeople().length;
+				if (delta === 0) {
+					// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+					delta =
+						b.getTravellingPeople().reduce((a, b) => a + b) -
+						a.getTravellingPeople().reduce((a, b) => a + b);
+				}
 			}
-			if (a.getElapsedTime() > b.getElapsedTime()) {
-				return 1;
-			}
-			return 0;
+			return delta;
 		}
 		const backtrackingSearch = new BacktrackingSearch(sortingAlgorithm);
 		const solutionPath = backtrackingSearch.search();
