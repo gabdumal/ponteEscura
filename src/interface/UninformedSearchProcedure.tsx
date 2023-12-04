@@ -28,7 +28,8 @@ export default function UninformedSearchProcedure(
 						b.getRule().getTravellingPeople().length -
 						a.getRule().getTravellingPeople().length;
 					if (delta === 0) {
-						// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+						// If the number of people is the same, it is better to choose the node that
+						// takes the slowest person as companion
 						delta =
 							b
 								.getRule()
@@ -54,7 +55,8 @@ export default function UninformedSearchProcedure(
 						a.getRule().getTravellingPeople().length -
 						b.getRule().getTravellingPeople().length;
 					if (delta === 0) {
-						// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+						// If the number of people is the same, it is better to choose the node that
+						// takes the slowest person as companion
 						delta =
 							a
 								.getRule()

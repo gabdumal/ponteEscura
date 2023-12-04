@@ -6,13 +6,14 @@ export default class GreedyTreeNode extends WeightedTreeNode {
 	/// Getters
 	private getHeuristic(): number {
 		const state = this.getState();
-
+		// Sum of the elapsed time of all the items in the initial river bank
 		const initialRiverBankItems = state.getRiverBankItems(RiverBank.Initial);
 		const initialRiverBankValue = initialRiverBankItems.reduce(
 			(accumulator, item) => accumulator + item,
 			0,
 		);
-
+		// If the lamp is in the final river bank, then get the value of
+		// the fastest person there
 		let conditionalValue = 0;
 		if (state.getLampPosition() === RiverBank.Final) {
 			const finalRiverBankItems = state.getRiverBankItems(RiverBank.Final);

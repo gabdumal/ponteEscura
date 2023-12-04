@@ -6,8 +6,8 @@ import {
 	GraphAttributesObject,
 } from 'ts-graphviz';
 import Tree from '../Tree/Tree.js';
-import WeightedTreeNode from './WeightedTreeNode.ts';
-import WeightedTreeEdge from './WeightedTreeEdge.ts';
+import WeightedTreeNode from './WeightedTreeNode.js';
+import WeightedTreeEdge from './WeightedTreeEdge.js';
 
 export default abstract class WeightedTree extends Tree {
 	/// Methods

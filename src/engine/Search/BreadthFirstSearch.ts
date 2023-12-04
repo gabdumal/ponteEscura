@@ -1,4 +1,4 @@
-import UninformedSearch from './UninformedSearch.ts';
+import UninformedSearch from './UninformedSearch.js';
 import TreeEdge from '../Structure/Tree/TreeEdge.js';
 import TreeNode from '../Structure/Tree/TreeNode.js';
 

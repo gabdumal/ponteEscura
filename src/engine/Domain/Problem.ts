@@ -6,11 +6,8 @@ import {
 } from 'ts-graphviz';
 import Rule from './Rule.js';
 import State from './State.js';
-import BasicEdge from '../Structure/Basic/BasicEdge.ts';
-import Tree from '../Structure/Tree/Tree.ts';
-import TreeEdge from '../Structure/Tree/TreeEdge.ts';
-import Graph from '../Structure/Graph/Graph.ts';
-import GraphNode from '../Structure/Graph/GraphNode.ts';
+import GraphNode from '../Structure/Graph/GraphNode.js';
+import Graph from '../Structure/Graph/Graph.js';
 
 export enum Item {
 	Lamp = 0,
@@ -20,6 +17,14 @@ export enum Item {
 	Woman = 8,
 	Lady = 12,
 }
+// export enum Item {
+// 	Lamp = 0,
+// 	Athlete = 6,
+// 	Boy = 8,
+// 	Lord = 13,
+// 	Woman = 20,
+// 	Lady = 36,
+// }
 
 function getRules(): Array<Rule> {
 	const items: Array<Item> = [
@@ -176,8 +181,8 @@ export default class Problem {
 	public static exportViableStatesToDot(): string {
 		const graph = new Graph();
 		let node = graph.addNode(new State());
-		for (let i = 0; i < graph.getNodesAmmount(); i++) {
-			node = graph.getNode(i);
+		for (let i = 0; i < graph.getNodes().length; i++) {
+			node = graph.getNodes()[i];
 			if (node === null) continue;
 			const validRules = node.getState().getValidRules(true);
 			for (const rule of validRules) {
@@ -195,8 +200,8 @@ export default class Problem {
 	public static exportSearchSpaceToDot(): string {
 		const graph = new Graph();
 		let node = graph.addNode(new State());
-		for (let i = 0; i < graph.getNodesAmmount(); i++) {
-			node = graph.getNode(i);
+		for (let i = 0; i < graph.getNodes().length; i++) {
+			node = graph.getNodes()[i];
 			if (node === null) continue;
 			graph.createValidTransitions(node);
 		}

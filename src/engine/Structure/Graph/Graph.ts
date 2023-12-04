@@ -21,12 +21,8 @@ export default class Graph extends BasicStructure {
 	}
 
 	/// Getters
-	public getNodesAmmount(): number {
-		return this.nodes.length;
-	}
-
-	public getNode(index: number): GraphNode {
-		return this.nodes[index];
+	public getNodes(): Array<GraphNode> {
+		return this.nodes;
 	}
 
 	/// Methods

@@ -15,7 +15,27 @@ export default function DynamicTreeGame() {
 	const [victory, setVictory] = React.useState<boolean>(false);
 
 	const sortingFunction = (a: TreeEdge, b: TreeEdge) => {
-		return a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
+		// Breadth first search is a FIFO algorithm, so we sort in ascending order
+		let delta = a.getRule().getElapsedTime() - b.getRule().getElapsedTime();
+		if (delta === 0) {
+			// If the elapsed time is the same, it is better to choose the node with more people
+			delta =
+				b.getRule().getTravellingPeople().length -
+				a.getRule().getTravellingPeople().length;
+			if (delta === 0) {
+				// If the number of people is the same, it is better to choose the node that takes the slowest person as companion
+				delta =
+					b
+						.getRule()
+						.getTravellingPeople()
+						.reduce((a, b) => a + b) -
+					a
+						.getRule()
+						.getTravellingPeople()
+						.reduce((a, b) => a + b);
+			}
+		}
+		return delta;
 	};
 
 	useEffect(() => {

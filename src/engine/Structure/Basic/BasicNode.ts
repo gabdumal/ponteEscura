@@ -67,7 +67,13 @@ export default abstract class BasicNode {
 		this.targetEdges = this.targetEdges.concat(targetEdges);
 	}
 
-	public abstract checkIfThereIsLoop(state: State): boolean;
+	public checkIfTransitionAlreadyExists(rule: Rule): boolean {
+		const targetEdges = this.getTargetEdges();
+		for (const targetEdge of targetEdges) {
+			if (targetEdge.getRule() === rule) return true;
+		}
+		return false;
+	}
 
 	public getDotColor(): string {
 		const outcome = this.getState().getOutcome();

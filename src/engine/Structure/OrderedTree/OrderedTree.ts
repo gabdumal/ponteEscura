@@ -1,5 +1,5 @@
 import State from '../../Domain/State.js';
-import OrderedTreeNode from './OrderedTreeNode.ts';
+import OrderedTreeNode from './OrderedTreeNode.js';
 import WeightedTree from '../WeightedTree/WeightedTree.js';
 
 export default class OrderedTree extends WeightedTree {

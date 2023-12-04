@@ -2,7 +2,7 @@
 
     ' Config
     hide empty members
-    skinparam groupInheritance 2
+    ' skinparam groupInheritance 2
     ' skinparam classAttributeIconSize 0
     ' left to right direction
 
@@ -39,6 +39,12 @@
                 class GreedyTreeNode
                 class AStarTreeNode
             }
+        }
+
+        package "Graph" as PK_Graph <<Rectangle>> {
+            class GraphEdge
+            class GraphNode
+            class Graph
         }
     }
 
@@ -122,23 +128,20 @@
         #addTargetEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
         +addEdge(targetNode: BasicNode, rule: Rule, connect: boolean): BasicEdge
         +connectTargetEdges(targetEdges: BasicEdge[]): void
-        +{abstract}checkIfThereIsLoop(state: State): boolean
+        +checkIfTransitionAlreadyExists(rule: Rule): boolean
     }
 
     abstract class BasicStructure {
         -nextNodeId: number
         #{abstract}instantiateNode(id: number, state: State): BasicNode
         #createNode(state: State): BasicNode
-        +{abstract}createValidTransitions(node: BasicNode, sortingFunction: Function): BasicEdge[]
+        +{abstract}createValidTransitions(node: BasicNode,\nsortingFunction: Function): BasicEdge[]
     }
 
-    class TreeEdge {}
 
     class TreeNode {
         -sourceEdge: TreeEdge | null
-        #addSourceEdge(sourceNode: TreeNode, rule: Rule): TreeEdge | null
         +checkIfThereIsLoop(state: State): boolean
-        +checkIfTransitionAlreadyExists(rule: Rule): boolean
     }
 
     class Tree {
@@ -164,6 +167,16 @@
         -getHeuristic(): number
     }
 
+    class GraphNode {
+        -sourceEdges: GraphEdge[]
+    }
+
+    class Graph {
+        -nodes: GraphNode[]
+        +addNode(state: State): GraphNode
+        +searchNode(state: State): GraphNode | null
+    }
+
     abstract class Search {
         #tree: Tree
         +{static}getAlgorithmName(): string
@@ -181,11 +194,11 @@
         -openNodes: TreeNode[]
         -closedNodes: TreeNode[]
         {field}-sortingFunction: (TreeEdge, TreeEdge) => number
-        {abstract}+getCurrentNode(): TreeNode
+        {abstract}+getCurrentNode(remove: boolean): TreeNode
         -doIteration(): TreeEdge[] | null
     }
 
-    abstract class UninformedSearch {
+    abstract class InformedSearch {
         -currentNode: WeightedTreeNode
         -openEdges: WeightedTreeEdge[]
         -closedNodes: WeightedTreeNode[]
@@ -203,35 +216,35 @@
     BasicNode "1" --> "1" State : Has state
     TreeNode "1" --> "0..1" TreeEdge : Has source
     Tree "1" --> "1" TreeNode : Has root
-    Tree "1" <-- "1" Search : Construct tree
+    Tree "1" <-right- "1" Search : Construct tree
     TreeEdge --|> BasicEdge
     TreeNode --|> BasicNode
     Tree --|> BasicStructure
-    BacktrackingSearch --|> Search
-    UninformedSearch --|> Search
-    InformedSearch --|> Search
-    BreadthFirstSearch --|> UninformedSearch
-    DepthFirstSearch --|> UninformedSearch
-    OrderedSearch -l-|> InformedSearch
-    GreedySearch -d-|> InformedSearch
-    AStarSearch -do-|> InformedSearch
+    GraphEdge --|> BasicEdge
+    GraphNode --|> BasicNode
+    Graph -u-|> BasicStructure
+    BacktrackingSearch -left-|> Search
+    UninformedSearch -up-|> Search
+    InformedSearch -down-|> Search
+    BreadthFirstSearch -up-|> UninformedSearch
+    DepthFirstSearch -up-|> UninformedSearch
+    OrderedSearch --|> InformedSearch
+    GreedySearch --|> InformedSearch
+    AStarSearch --|> InformedSearch
     WeightedTreeEdge --|> TreeEdge
     WeightedTreeNode --|> TreeNode
     WeightedTree --|> Tree
-    OrderedTreeNode ---|> WeightedTreeNode
-    GreedyTreeNode --|> WeightedTreeNode
+    OrderedTreeNode --|> WeightedTreeNode
+    GreedyTreeNode -up-|> WeightedTreeNode
     AStarTreeNode -|> WeightedTreeNode
 
     Item -[hidden]left- RiverBank
     RiverBank -[hidden]left- Outcome
-    UninformedSearch --[hidden]down-> Item
-    GreedySearch -[hidden]r- AStarSearch
-    AStarSearch -[hidden]d- OrderedSearch
-    WeightedTree -[hidden]d- WeightedTreeNode
-    AStarTreeNode -[hidden]d- WeightedTreeEdge
-    ' WeightedTreeNode -- WeightedTreeEdge
-    ' OrderedTreeNode -- GreedyTreeNode
-    ' GreedyTreeNode -- AStarTreeNode
+    BacktrackingSearch --[hidden]down-> Item
+    GraphEdge -[hidden]r- Graph
+    GraphNode -[hidden]u- Graph
+    GreedyTreeNode -[hidden]down-> WeightedTreeEdge
+    PK_InformedSearch -[hidden]down-- PK_UninformedSearch
 
 
 @enduml

@@ -45,18 +45,6 @@ export default class GraphNode extends BasicNode {
 		return edge;
 	}
 
-	public checkIfThereIsLoop(state: State): boolean {
-		for (const sourceEdge of this.sourceEdges) {
-			const sourceNode = sourceEdge.getSourceNode();
-			if (sourceNode.getState().equalsByItems(state)) {
-				return true;
-			} else {
-				return sourceNode.checkIfThereIsLoop(state);
-			}
-		}
-		return false;
-	}
-
 	public toDot(showTime: boolean = true): GraphvizNode {
 		const dotNode = new GraphvizNode(this.getId().toString(), {
 			[_.label]: `${this.getId().toString()}. {H${this.getHeuristic()}}\n${this.getState().getPlainTextScenery(

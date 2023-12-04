@@ -32,21 +32,13 @@ export default class TreeNode extends BasicNode {
 	public checkIfThereIsLoop(state: State): boolean {
 		if (this.sourceEdge === null) return false;
 		else {
-			const sourceNode = this.sourceEdge.getSourceNode();
+			const sourceNode = this.sourceEdge.getSourceNode() as TreeNode;
 			if (sourceNode.getState().equalsByItems(state)) {
 				return true;
 			} else {
 				return sourceNode.checkIfThereIsLoop(state);
 			}
 		}
-	}
-
-	public checkIfTransitionAlreadyExists(rule: Rule): boolean {
-		const targetEdges = this.getTargetEdges();
-		for (const targetEdge of targetEdges) {
-			if (targetEdge.getRule() === rule) return true;
-		}
-		return false;
 	}
 
 	public toDot(isInSolutionPath: boolean = false): GraphvizNode {

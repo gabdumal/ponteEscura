@@ -16,7 +16,8 @@ export default class OrderedSearch extends InformedSearch {
 			const bTargetNode = b.getTargetNode() as OrderedTreeNode;
 			const delta = aTargetNode.getValue() - bTargetNode.getValue();
 			if (delta === 0) {
-				// If the values are equal, then the node with the most items on the final river bank is chosen
+				// If the values are equal, then the node with the most items on the
+				// final river bank is chosen
 				return (
 					bTargetNode.getState().getRiverBankItems(RiverBank.Final).length -
 					aTargetNode.getState().getRiverBankItems(RiverBank.Final).length
