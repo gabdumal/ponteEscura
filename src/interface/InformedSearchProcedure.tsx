@@ -1,3 +1,4 @@
+import {cpuUsage} from 'node:process';
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
@@ -33,7 +34,10 @@ export default function InformedSearchProcedure(
 			searchAlgorithmSafeName = AStarSearch.getSafeAlgorithmName();
 		}
 
+		let cpuTime = cpuUsage();
 		const solutionPath = searchAlgorithm.search();
+		cpuTime = cpuUsage(cpuTime);
+
 		let solutionPathNodes: Array<OrderedTreeNode> = [];
 		if (solutionPath !== null) {
 			solutionPathNodes.push(
@@ -47,7 +51,12 @@ export default function InformedSearchProcedure(
 		const directory = `images/${searchAlgorithmSafeName}`;
 		fs.mkdirSync(directory, {recursive: true});
 
-		const dotTreeString = searchAlgorithm.getTree().toDot({solutionPathNodes});
+		const dotTreeString = searchAlgorithm.getTree().toDot({
+			attributes: {
+				label: `Tempo: ${(cpuTime.user + cpuTime.system) / 1000}ms`,
+			},
+			solutionPathNodes,
+		});
 		OrderedTree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 
 		let openNodes: Array<OrderedTreeNode> = searchAlgorithm

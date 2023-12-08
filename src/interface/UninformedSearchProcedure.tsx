@@ -1,3 +1,4 @@
+import {cpuUsage} from 'node:process';
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
@@ -74,7 +75,10 @@ export default function UninformedSearchProcedure(
 			searchAlgorithmSafeName = DepthFirstSearch.getSafeAlgorithmName();
 		}
 
+		let cpuTime = cpuUsage();
 		const solutionPath = searchAlgorithm.search();
+		cpuTime = cpuUsage(cpuTime);
+
 		let solutionPathNodes: Array<TreeNode> = [];
 		if (solutionPath !== null) {
 			solutionPathNodes.push(searchAlgorithm.getTree().getRoot());
@@ -86,7 +90,12 @@ export default function UninformedSearchProcedure(
 		const directory = `images/${searchAlgorithmSafeName}`;
 		fs.mkdirSync(directory, {recursive: true});
 
-		const dotTreeString = searchAlgorithm.getTree().toDot({solutionPathNodes});
+		const dotTreeString = searchAlgorithm.getTree().toDot({
+			attributes: {
+				label: `Tempo: ${(cpuTime.user + cpuTime.system) / 1000}ms`,
+			},
+			solutionPathNodes,
+		});
 		Tree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 
 		const dotOpenNodesString = Tree.exportNodesListToDot(

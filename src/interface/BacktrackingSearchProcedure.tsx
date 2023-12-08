@@ -1,3 +1,4 @@
+import {cpuUsage} from 'node:process';
 import fs from 'fs';
 import React, {useEffect} from 'react';
 import {Box, Text} from 'ink';
@@ -27,7 +28,11 @@ export default function BacktrackingSearchProcedure() {
 			return delta;
 		}
 		const backtrackingSearch = new BacktrackingSearch(sortingAlgorithm);
+
+		let cpuTime = cpuUsage();
 		const solutionPath = backtrackingSearch.search();
+		cpuTime = cpuUsage(cpuTime);
+
 		let solutionPathNodes: Array<TreeNode> = [];
 		if (solutionPath !== null) {
 			solutionPathNodes.push(backtrackingSearch.getTree().getRoot());
@@ -39,9 +44,12 @@ export default function BacktrackingSearchProcedure() {
 		const directory = `images/${BacktrackingSearch.getSafeAlgorithmName()}`;
 		fs.mkdirSync(directory, {recursive: true});
 
-		const dotTreeString = backtrackingSearch
-			.getTree()
-			.toDot({solutionPathNodes});
+		const dotTreeString = backtrackingSearch.getTree().toDot({
+			attributes: {
+				label: `Tempo: ${(cpuTime.user + cpuTime.system) / 1000}ms`,
+			},
+			solutionPathNodes,
+		});
 		Tree.exportToFile(dotTreeString, `${directory}/tree`, 'svg');
 	}, []);
 
